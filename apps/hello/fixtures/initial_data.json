@@ -1,0 +1,34 @@
+[
+    {
+        "fields": {
+            "first_name": "Olga",
+            "last_name": "Lavrova",
+            "bio": "born in 1978, study: school 1985-1995 years, university 1995-2000, working way from 2000",
+            "birthday": "1978-05-22",
+            "email": "krocozabr@gmail.com",
+            "jabber": "ollavr@jabber.ru",
+            "skype": "ollavrova",
+            "other": "nothing"
+        },
+        "model": "hello.person",
+        "pk": 1
+    },
+    {
+        "pk": 1,
+        "model": "auth.user",
+        "fields": {
+            "username": "admin",
+            "first_name": "",
+            "last_name": "",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2015-03-05T11:44:25.430Z",
+            "groups": [],
+            "user_permissions": [],
+            "password": "pbkdf2_sha256$12000$YLvu1hufQe5N$Yz29siaHHduntfDA4R7RrH5KfoLuAiBkV51ITEQRvnM=",
+            "email": "info0@google.com",
+            "date_joined": "2015-03-05T11:44:25.430Z"
+        }
+    }
+]

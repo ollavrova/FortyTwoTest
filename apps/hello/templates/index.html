@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Home{% endblock %}
+{% block extra_head %}
+    {{ super }}  {{ form.media }}
+{% endblock %}
+
+{% block content %}
+
+        <div id="body main-body">
+            <div class="title">
+                <h3>42 Coffee Cups Test Assignment</h3>
+            </div>
+            {% if person %}
+                <div class="col-xs-9 left-side">
+
+                    <p>{{ person.first_name }}</p>
+                    <p>{{ person.last_name }}</p>
+                    <p>{{ person.birthday }}</p>
+                    <p>Bio:
+                    <div class="multiline">{{ person.bio }} </div>
+                    </p>
+                </div>
+                <div class="col-xs-9 right-side">
+                    <p>Contacts</p>
+                    <p>Email: {{ person.email }}</p>
+                    <p>Jabber: {{ person.jabber }}</p>
+                    <p>Skype: {{ person.skype }}</p>
+                    <p>Other contacts:
+                    <div class="multiline">{{ person.other }} </div>
+                    </p>
+
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-md-8">
+                        <p>Sorry, you have an empty database now...</p>
+                    </div>
+                </div>
+            {% endif %}
+            <div id="result"></div>
+        </div>
+{% endblock %}

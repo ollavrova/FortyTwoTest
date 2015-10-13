@@ -1,1 +1,83 @@
- 
+body {
+    background-color: #EEEEEE;
+    display: table;
+}
+
+.left-side {
+    float: none;
+    display: table-cell;
+    padding-right: 50px;
+    width: 200px;
+}
+
+.right-side {
+    float: none;
+    display: table-cell;
+    width: 200px;
+}
+
+.container {
+    width: 1070px;
+    height: 1080px;
+    color: #484848;
+    margin: 0 100px;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+
+.content {
+    width: 800px;
+    height: 1070px;
+    background-image: url(http://framebox.org/static/images/cell10x10.gif);
+    padding: 20px;
+    margin: 25px auto;
+    word-wrap: break-word;
+}
+
+div.image-edit {
+    height: 314px;
+    padding: 0px;
+    width: 229px;
+    border: 3px solid rgb(72, 72, 72);
+    /*padding-top: 30px;*/
+    margin: 0px;
+}
+
+.title {
+    width: 500px;
+}
+h3 {
+    height: 15px;
+    font-size: 22px;
+    padding: 2px;
+    font-family: Georgia, serif;
+    line-height: 26px;
+    font-weight: normal;
+}
+
+div#main-body {
+    width: 960px;
+    height: 700px;
+}
+
+p {
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-size: 16px;
+    font-family: Georgia, serif;
+    line-height: 16px;
+}
+
+.multiline {
+    width: 330px;
+    height: 128px;
+    font-size: 16px;
+    font-family: Georgia, serif;
+    line-height: 16px;
+}

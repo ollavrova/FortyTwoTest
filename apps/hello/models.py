@@ -10,3 +10,13 @@ class Person(models.Model):
     jabber = models.CharField(max_length=100, verbose_name='Jabber')
     skype = models.CharField(max_length=100, verbose_name='Skype')
     other = models.TextField(verbose_name='Other contacts')
+
+
+class Requests(models.Model):
+    row = models.CharField(max_length=1000)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    request_path = models.CharField(max_length=250, null=True)
+    request_method = models.CharField(max_length=10, null=True)
+
+    def __unicode__(self):
+        return str(self.id)

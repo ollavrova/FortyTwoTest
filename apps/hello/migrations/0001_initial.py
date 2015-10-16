@@ -14,11 +14,11 @@ class Migration(SchemaMigration):
             ('first_name', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('last_name', self.gf('django.db.models.fields.CharField')(max_length=150)),
             ('birthday', self.gf('django.db.models.fields.DateField')()),
-            ('bio', self.gf('django.db.models.fields.CharField')(max_length=1000)),
+            ('bio', self.gf('django.db.models.fields.TextField')()),
             ('email', self.gf('django.db.models.fields.EmailField')(max_length=75)),
             ('jabber', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('skype', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('other', self.gf('django.db.models.fields.CharField')(max_length=500)),
+            ('other', self.gf('django.db.models.fields.TextField')()),
         ))
         db.send_create_signal(u'hello', ['Person'])
 
@@ -31,14 +31,14 @@ class Migration(SchemaMigration):
     models = {
         u'hello.person': {
             'Meta': {'object_name': 'Person'},
-            'bio': ('django.db.models.fields.CharField', [], {'max_length': '1000'}),
+            'bio': ('django.db.models.fields.TextField', [], {}),
             'birthday': ('django.db.models.fields.DateField', [], {}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'jabber': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
-            'other': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
+            'other': ('django.db.models.fields.TextField', [], {}),
             'skype': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         }
     }

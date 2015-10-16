@@ -67,8 +67,27 @@ class TestPage(TestCase):
                             status_code=200)
         self.assertContains(response, "Test", status_code=200)
         self.assertContains(response, "TestTest", status_code=200)
-        self.assertContains(response, "born in 1900, study: school 1955-1995 years, university 1955-1960, working way from 1950", status_code=200)
+        self.assertContains(response,
+                            "born in 1900, study: school 1955-1995 years",
+                            status_code=200)
         self.assertContains(response, "test@gmail.com", status_code=200)
         self.assertContains(response, "test@jabber.ru", status_code=200)
         self.assertContains(response, "test_skype", status_code=200)
         self.assertContains(response, "test test", status_code=200)
+
+
+class TestEmptyBase(TestCase):
+    def setUp(self):
+        self.person = Person.objects.first()
+
+    def test_empty_page(self):
+        """
+        testing what if database is empty
+        """
+        Person.objects.all().delete()
+        response = self.client.get(reverse('home'))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, self.person.first_name,
+                               status_code=200)
+        self.assertContains(response, 'Sorry, you have an empty database now',
+                            status_code=200)

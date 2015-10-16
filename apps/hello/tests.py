@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from apps.hello.models import Person
+from apps.hello.models import Person, Requests
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
@@ -91,3 +91,43 @@ class TestEmptyBase(TestCase):
                                status_code=200)
         self.assertContains(response, 'Sorry, you have an empty database now',
                             status_code=200)
+
+
+class TestMiddleware(TestCase):
+    def setUp(self):
+        for r in range(1, 15, 1):
+            Requests.objects.create(row='Example'+str(r),
+                                    request_path='/example_requests/'+str(r),
+                                    request_method='GET'+str(r))
+
+    def test_middleware_show_list(self):
+        """
+        testing middleware, and page that show only 10 first requests
+        """
+        response = self.client.get(reverse('req'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Requests list:", status_code=200)
+        for r in Requests.objects.all():
+            if r.id <= 10:
+                self.assertContains(response, r.request_path)
+            else:
+                self.assertNotContains(response, r.request_path)
+        response = self.client.get(reverse('req'), dict(request_old_count=15),
+                                   HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        self.assertEqual(response.status_code, 200)
+
+    def test_middleware_writing(self):
+        """
+        test middleware writing in db
+        """
+        count1 = Requests.objects.all().count()
+        response = self.client.get(reverse('req'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual('/requests/',
+                         Requests.objects.latest('timestamp').request_path)
+        response = self.client.get(reverse('home'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual('/',
+                         Requests.objects.latest('timestamp').request_path)
+        count2 = Requests.objects.all().count()
+        self.assertEqual(count2, count1+2)

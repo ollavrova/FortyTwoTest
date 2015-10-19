@@ -6,4 +6,5 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     url(r'^$', 'apps.hello.views.home', name='home'),
+    url(r'^requests/', 'apps.hello.views.req', name='req'),
 )

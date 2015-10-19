@@ -1,7 +1,13 @@
 import json
 import logging
+from django.contrib import auth, messages
+from django.contrib.auth.decorators import login_required
+from django.core.context_processors import csrf
 from django.http import HttpResponse
+from django.shortcuts import render_to_response, redirect
+from django.template import RequestContext
 from django.template.response import TemplateResponse
+from apps.hello.forms import PersonEditForm, LoginForm
 from apps.hello.models import Person, Requests
 from django.views.generic import TemplateView
 
@@ -45,3 +51,45 @@ def req(request):
                                     {'object_list': query,
                                      'old_count': count})
     return response
+
+
+def login(request):
+    context = []
+    form = LoginForm(request.POST or None)
+    context.update(csrf(request), form)
+    if request.POST and form.is_valid():
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        user = auth.authenticate(username=username, password=password)
+        context['form'] = form
+        if user is not None:
+            auth.login(request, user)
+            return redirect('/edit/')
+        else:
+            context['login_error'] = 'User not found'
+            return render_to_response('registration/login.html', context)
+    else:
+        return render_to_response('registration/login.html', context)
+
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
+
+
+@login_required
+def edit(request):
+    person = Person.objects.first()
+    if request.POST:
+        form = PersonEditForm(request.POST, request.FILES, instance=person)
+        if form.is_valid() and request.is_ajax():
+            try:
+                form.save()
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, e)
+            return render_to_response('hello/reload.html',
+                                      {'form': form, 'person': person}, RequestContext(request))
+    else:
+        form = PersonEditForm(instance=person)
+    return render_to_response('hello/edit.html',
+                              {'form': form, 'person': person}, RequestContext(request))

@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import os
+from django.core.files.uploadedfile import SimpleUploadedFile
+from fortytwo_test_task.settings import STATICFILES_DIRS
 from apps.hello.models import Person, Requests
 from django.core.urlresolvers import reverse
 from django.test import TestCase
@@ -131,3 +134,62 @@ class TestMiddleware(TestCase):
                          Requests.objects.latest('timestamp').request_path)
         count2 = Requests.objects.all().count()
         self.assertEqual(count2, count1+2)
+
+
+class TestEditForm(TestCase):
+    def setUp(self):
+        self.auth = {"username": "admin", "password": "admin"}
+        self.person = Person.objects.first()
+
+    def test_auth(self):
+        self.assertEqual(self.client.get(reverse('logout')).status_code, 302)
+        self.assertEqual(self.client.get(reverse('home')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('req')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('edit')).status_code, 302)
+        self.client.post(reverse('login'), self.auth)
+        self.assertEqual(self.client.get(reverse('edit')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('logout')).status_code, 302)
+        self.assertEqual(self.client.get(reverse('edit')).status_code, 302)
+
+    def test_editform(self):
+        self.client.post(reverse('login'), self.auth)
+        self.assertEqual(self.client.get(reverse('edit')).status_code, 200)
+        upload_file = open(os.path.join(STATICFILES_DIRS[0], 'img', "test.jpg"), "rb")
+        print os.path.join(STATICFILES_DIRS[0], 'img', "test.jpg"), 'exist'
+        data = dict(
+            first_name="Test",
+            last_name="User",
+            birthday="1994-04-11",
+            bio="biography test user",
+            email="google321@google.com",
+            jabber="xxx321@jabber.org",
+            skype="qwerty 321",
+            other="qwerty drtreter rtyht h",
+            photo=SimpleUploadedFile(upload_file.name, upload_file.read())
+        )
+        response = self.client.post(reverse('edit'), data)
+        self.assertEqual(response.status_code, 200)
+        upload_file.seek(0)
+        data1 = dict(
+            first_name="Olga",
+            last_name="Test",
+            birthday="2000-01-01",
+            bio="biography",
+            email="google@google.com",
+            jabber="xxx@jabber.org",
+            skype="qwerty",
+            other="qwerty qwerty qwerty",
+            photo=SimpleUploadedFile(upload_file.name, upload_file.read())
+        )
+        response = self.client.post(reverse('edit'), data1, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        self.assertEqual(response.status_code, 200)
+        self.client.get(reverse('home'))
+        self.assertEqual(self.client.get(reverse('home')).status_code, 200)
+        self.assertEqual(self.person.first_name, "Olga")
+        self.assertEqual(self.person.last_name, "Test")
+        self.assertEqual(self.person.birthday, "2000-01-01")
+        self.assertEqual(self.person.bio, "biography")
+        self.assertEqual(self.person.email, "google@google.com")
+        self.assertEqual(self.person.jabber, "xxx@jabber.org")
+        self.assertEqual(self.person.skype, "qwerty")
+        self.assertEqual(self.person.other, "qwerty qwerty qwerty")

@@ -295,3 +295,18 @@ class TestSignalProcessor(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(Journal.objects.filter(id_item=self.person.pk,
                                                action='create'))
+
+
+class TestCustomerRequest(TestCase):
+
+    def setUp(self):
+        self.req = Requests.objects.create(
+            row='dlfkgndlfkgndflkgndflkgndlfgndlfgndflgkndflg fdg dflgd',
+            priority=1,
+        )
+
+    def test_priority(self):
+        """
+        testing priority for saved requests - task from customer requests
+        """
+        self.assertEqual(self.req.priority, 1)

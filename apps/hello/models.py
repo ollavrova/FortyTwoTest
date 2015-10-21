@@ -34,6 +34,7 @@ class Requests(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     request_path = models.CharField(max_length=250, null=True)
     request_method = models.CharField(max_length=10, null=True)
+    priority = models.IntegerField(default=1)
 
     def __unicode__(self):
         return str(self.id)

@@ -25,8 +25,20 @@ class Person(models.Model):
     photo = ThumbnailerImageField(upload_to='uploads', blank=True, null=True,
                                   resize_source=dict(size=size, sharpen=True))
 
-    def __unicode__(self):
-        return "{0} {1}".format(self.first_name, self.last_name)
+    def save(self, *args, **kw):
+        if self.pk is not None:
+            orig = Person.objects.first()
+            if (orig.first_name != self.first_name) or \
+                    (orig.last_name != self.last_name) or \
+                    (orig.bio != self.bio) or \
+                    (orig.birthday != self.birthday) or \
+                    (orig.email != self.email) or \
+                    (orig.jabber != self.jabber) or \
+                    (orig.skype != self.skype) or \
+                    (orig.other != self.other) or \
+                    (orig.photo != self.photo):
+                my_callback_save(Person, orig, post_save, update_fields=True)
+        super(Person, self).save(*args, **kw)
 
 
 class Requests(models.Model):

@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
+from django.core import management
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.template import Context, Template
 from fortytwo_test_task.settings import STATICFILES_DIRS
-from apps.hello.models import Person, Requests
+from apps.hello.models import Person, Requests, Journal
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from StringIO import StringIO
 
 
 class TestShowPage(TestCase):
@@ -208,3 +211,87 @@ class TestEditForm(TestCase):
         self.assertContains(response, 'First Name: This field is required.')
         self.assertContains(response, 'Last Name: This field is required.')
         self.assertContains(response, 'Skype: This field is required.')
+
+
+class TestTemplateTag(TestCase):
+
+    def setUp(self):
+        self.person = Person.objects.create(
+            first_name="Olga",
+            last_name="Test",
+            birthday="2000-01-01",
+            bio="biography",
+            email="google@google.com",
+            jabber="xxx@jabber.org",
+            skype="qwerty",
+            other="qwerty qwerty qwerty",
+        )
+
+    def test_tag(self):
+        """
+        testing custom template tag for objects admin link
+        """
+        html = Template(
+            "{% load edit_link %}"
+            "{% edit_link person %}"
+        ).render(Context({
+            'person': self.person
+        }))
+        self.assertEqual(html, reverse("admin:hello_person_change",
+                                       args=(self.person.pk,)))
+
+
+class TestCommand(TestCase):
+
+    def test_command(self):
+        """
+        testing statistic command
+        """
+        out = StringIO()
+        management.call_command('stats', stdout=out)
+        self.assertTrue("Person: 1" in out.getvalue())
+
+
+class TestSignalProcessor(TestCase):
+
+    def setUp(self):
+        self.auth = {"username": "admin", "password": "admin"}
+        self.person = Person.objects.create(
+            first_name="Olga",
+            last_name="Test",
+            birthday="2000-01-01",
+            bio="biography",
+            email="google@google.com",
+            jabber="xxx@jabber.org",
+            skype="qwerty",
+            other="qwerty qwerty qwerty"
+        )
+
+    def test_signals(self):
+        """
+        testing signals after any db action
+        """
+        self.client.get(reverse('home'))
+        self.assertEqual(self.client.get(reverse('home')).status_code, 200)
+        response = self.client.get(reverse('home'))
+        self.assertTrue("Olga" in response.content)
+        self.assertTrue(Journal.objects.filter(id_item=self.person.pk))
+        self.assertTrue((Journal.objects.filter(
+            id_item=self.person.pk)[0]).action == 'create')
+        self.client.post(reverse('login'), self.auth)
+        self.assertEqual(self.client.get(reverse('edit')).status_code, 200)
+        data = dict(
+            pk=1,
+            first_name="Test",
+            last_name="User",
+            birthday="1994-04-11",
+            bio="biography test user",
+            email="google321@google.com",
+            jabber="xxx321@jabber.org",
+            skype="qwerty 321",
+            other="qwerty drtreter rtyht h"
+        )
+        response = self.client.post(reverse('edit'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Journal.objects.filter(id_item=self.person.pk,
+                                               action='create'))

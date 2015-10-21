@@ -139,7 +139,6 @@ class TestMiddleware(TestCase):
 class TestEditForm(TestCase):
     def setUp(self):
         self.auth = {"username": "admin", "password": "admin"}
-        self.person = Person.objects.first()
 
     def test_auth(self):
         """
@@ -173,21 +172,29 @@ class TestEditForm(TestCase):
             other="qwerty qwerty qwerty",
             photo=SimpleUploadedFile(upload_file.name, upload_file.read())
         )
-        response = self.client.post(reverse('edit'), data,
-                                    HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(reverse('edit'), data=data,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        self.client.get(reverse('home'))
-        self.assertEqual(self.client.get(reverse('home')).status_code, 200)
-        self.assertEqual(self.person.first_name, data['first_name'])
-        self.assertEqual(self.person.last_name, data['last_name'])
-        self.assertEqual(self.person.birthday, data['birthday'])
-        self.assertEqual(self.person.bio, data['bio'])
-        self.assertEqual(self.person.email, data['email'])
-        self.assertEqual(self.person.jabber, data['jabber'])
-        self.assertEqual(self.person.skype, data['skype'])
-        self.assertEqual(self.person.other,  data['other'])
+        response1 = self.client.get(reverse('edit'))
+        self.assertContains(response1, data['first_name'])
+        self.assertContains(response1, data['last_name'])
+        self.assertContains(response1, data['bio'])
+        self.assertContains(response1, data['email'])
+        self.assertContains(response1, data['skype'])
+        self.assertContains(response1, data['other'])
+        response2 = self.client.get(reverse('home'))
+        self.assertEqual(response2.status_code, 200)
+        self.assertContains(response2, data['first_name'])
+        self.assertContains(response2, data['last_name'])
+        self.assertContains(response2, data['bio'])
+        self.assertContains(response2, data['email'])
+        self.assertContains(response2, data['skype'])
+        self.assertContains(response2, data['other'])
 
     def test_show_errors(self):
+        """
+        test for checking show errors
+        """
         self.client.post(reverse('login'), self.auth)
         data = dict(
             first_name='',

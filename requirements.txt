@@ -1,5 +1,4 @@
 Django==1.6.7
 42cc-pystyle
 south
-pillow
 easy_thumbnails

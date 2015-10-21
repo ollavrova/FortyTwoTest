@@ -50,7 +50,8 @@ class Migration(SchemaMigration):
         u'hello.requests': {
             'Meta': {'object_name': 'Requests'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'priority': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
+            'request_method': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True'}),
+            'request_path': ('django.db.models.fields.CharField', [], {'max_length': '250', 'null': 'True'}),
             'row': ('django.db.models.fields.CharField', [], {'max_length': '1000'}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         }

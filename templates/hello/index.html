@@ -4,8 +4,7 @@
 {% block extra_head %}
     {{ super }}  {{ form.media }}
 {% endblock %}
-
-{% block content %}
+            {% block title-block %}
             <div class="title left-side">
                 <h3>42 Coffee Cups Test Assignment</h3>
             </div>
@@ -19,6 +18,9 @@
                     {% endif %}
                 </p>
             </div>
+            {% endblock title-block %}
+{% block content %}
+
         <div id="body main-body">
             {% if person %}
                 <div class="col-xs-9 left-side">

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 from apps.hello.widget import CustomDatePicker
 from django import forms
 from apps.hello.models import Person
@@ -10,20 +11,29 @@ class LoginForm(forms.Form):
 
 
 class PersonEditForm(forms.ModelForm):
-
     class Meta:
         model = Person
-        fields = ['first_name', 'last_name', 'birthday', 'bio', 'email', 'photo', 'skype', 'jabber', 'other']
         widgets = {
-            'birthday': CustomDatePicker,
+            'birthday': CustomDatePicker(
+                params="dateFormat: 'yy-mm-dd', changeYear: true, defaultDate: '-37y', yearRange: 'c-15:c+15'",
+                attrs={'type': 'date'},
+            )
         }
 
     def __init__(self, *args, **kwargs):
         super(PersonEditForm, self).__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs['type'] = 'email'
         for field in self.fields:
             if (field == 'bio') or (field == 'other'):
                 self.fields[field].widget.attrs['class'] = 'multiline'
                 self.fields[field].widget = forms.Textarea(attrs={'rows': 4})
             else:
                 self.fields[field].widget.attrs['class'] = 'editform'
+            if not (field == 'photo'):
+                self.fields[field].widget.attrs['required'] = "required"
 
+    def clean_birthday(self):
+        birthday = self.cleaned_data['birthday']
+        if birthday >= datetime.datetime.now().date():
+            raise forms.ValidationError("You must input date before today!")
+        return birthday

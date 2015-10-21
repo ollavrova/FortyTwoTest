@@ -8,20 +8,24 @@ body {
     display: table-cell;
     padding-right: 50px;
     width: 200px;
+    position: relative;
+    left: 20px;
 }
 
 .right-side {
     float: none;
     display: table-cell;
     width: 200px;
+    position: relative;
+    left: 20px;
 }
 
 .container {
     width: 1070px;
-    height: 1080px;
+    min-height: 1080px;
     color: #484848;
     margin: 0 100px;
-    padding: 0;
+    /*padding: 20px;*/
     border: 0;
     outline: 0;
     font-size: 100%;
@@ -30,7 +34,7 @@ body {
 
 .content {
     width: 800px;
-    background-image: url(http://framebox.org/static/images/cell10x10.gif);
+    background-color: white;
     padding: 20px;
     margin: 25px auto;
     word-wrap: break-word;
@@ -216,7 +220,7 @@ strong.alert-success {
     color: #008000;
     background-color: inherit;
 }
-strong.alert-error {
+strong.alert-error, #errors {
     color: red;
     background-color: inherit;
 }
@@ -225,5 +229,21 @@ strong.alert-error {
     background-color: inherit;
 }
 div#result {
-    height: 10px;
+    height: 25px;
+    float: inherit;
+    position: relative;
+    left: 20px;
+}
+
+div#errors {
+    min-height: 25px;
+    float: inherit;
+    position: relative;
+    left: 20px;
+}
+div.footer {
+    /*float: inherit;*/
+    position: relative;
+    left: 10px;
+    padding: 10px 0 20px 0;
 }

@@ -9,14 +9,27 @@
 </head>
 <body id="{% block body_id %}{% endblock %}" class="container {% block body_class %}{% endblock %}">
 <div class="content">
+    {% block title-block %}
+        <div class="title left-side">
+            <h3>42 Coffee Cups Test Assignment</h3>
+        </div>
+        <div class="right-side">
+            <p>
+                {% if user.is_authenticated %}
+                <a href="{% url 'edit' %}">Edit</a>
+                <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
+                {% else %}
+                <a href="{% url 'django.contrib.auth.views.login' %}">Login</a>
+                {% endif %}
+            </p>
+        </div>
+    {% endblock %}
     {% block content %}{% endblock content %}
     {% block footer %}
-        <div class="row">
+        <div  class="footer">
             <div class="hr">
                 <hr/>
             </div>
-        </div>
-        <div class="row">
             <div class="col-md-4">
                 <p><a href="{% url 'req' %}">requests</a></p>
             </div>

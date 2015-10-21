@@ -10,6 +10,7 @@
 {% block title-block %}{% endblock %}
 
 {% block content %}
+    <div>
     <h3 class="main-title"> Requests list:</h3>
     <input id="request_old_count" value="{{ old_count }}" type="hidden"/>
     <p>
@@ -24,6 +25,7 @@
             <hr/>
             </p>
         {% endfor %}
+    </div>
 {% endblock %}
 
 {% block footer %}

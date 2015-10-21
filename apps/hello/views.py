@@ -80,16 +80,23 @@ def logout(request):
 @login_required
 def edit(request):
     person = Person.objects.first()
-    if request.POST:
+    if request.method == 'POST' and request.is_ajax():
+        logger.info('User %s tried to edit data.' % request.user)
         form = PersonEditForm(request.POST, request.FILES, instance=person)
-        if form.is_valid() and request.is_ajax():
+        if form.is_valid():
             try:
                 form.save()
+                logger.info('The form is saved.')
             except Exception as e:
                 messages.add_message(request, messages.ERROR, e)
-            return render_to_response('hello/reload.html',
-                                      {'form': form, 'person': person}, RequestContext(request))
+                logger.exception(e)
+        else:
+            messages.add_message(request, messages.ERROR, form.errors)
+        return render_to_response('hello/reload.html',
+                                  {'form': form, 'person': person},
+                                  RequestContext(request))
     else:
         form = PersonEditForm(instance=person)
     return render_to_response('hello/edit.html',
-                              {'form': form, 'person': person}, RequestContext(request))
+                              {'form': form, 'person': person},
+                              RequestContext(request))

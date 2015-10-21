@@ -142,6 +142,9 @@ class TestEditForm(TestCase):
         self.person = Person.objects.first()
 
     def test_auth(self):
+        """
+        testing auth to edit page
+        """
         self.assertEqual(self.client.get(reverse('logout')).status_code, 302)
         self.assertEqual(self.client.get(reverse('home')).status_code, 200)
         self.assertEqual(self.client.get(reverse('req')).status_code, 200)
@@ -152,10 +155,14 @@ class TestEditForm(TestCase):
         self.assertEqual(self.client.get(reverse('edit')).status_code, 302)
 
     def test_editform(self):
+        """
+        test edit form
+        """
         self.client.post(reverse('login'), self.auth)
         self.assertEqual(self.client.get(reverse('edit')).status_code, 200)
-        upload_file = open(os.path.join(STATICFILES_DIRS[0], 'img', "test.jpg"), "rb")
-        print os.path.join(STATICFILES_DIRS[0], 'img', "test.jpg"), 'exist'
+        upload_file = open(os.path.join(STATICFILES_DIRS[0],
+                                        'img', "test.jpg"), "rb")
+        # print os.path.join(STATICFILES_DIRS[0], 'img', "test.jpg"), 'exist'
         data = dict(
             first_name="Test",
             last_name="User",
@@ -181,7 +188,8 @@ class TestEditForm(TestCase):
             other="qwerty qwerty qwerty",
             photo=SimpleUploadedFile(upload_file.name, upload_file.read())
         )
-        response = self.client.post(reverse('edit'), data1, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(reverse('edit'), data1,
+                                    HTTP_X_REQUESTED_WITH="XMLHttpRequest")
         self.assertEqual(response.status_code, 200)
         self.client.get(reverse('home'))
         self.assertEqual(self.client.get(reverse('home')).status_code, 200)

@@ -49,7 +49,7 @@ class Journal(models.Model):
         return str(self.id)
 
 
-@receiver(post_save, sender=Requests)
+@receiver(post_save, sender=Requests)   # NOQA
 @receiver(post_save, sender=Person)
 def my_callback_save(sender, instance, signal, *args, **kwargs):
     if 'created' in kwargs:

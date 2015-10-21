@@ -1,11 +1,13 @@
  /*<![CDATA[*/
 $(document).ready(function() {
-    setInterval("ask()", 2000);
+    var counter = false;
     var window_focus;
 
 $(window).focus(function() {
         console.log("focus came");
         var reset, old_count;
+        if (counter) {
+            clearInterval(counter);};
         reset = parseInt($("#result").text(), 10);
         $('title').text('Requests list');
         $('#result_upload').text('');
@@ -14,6 +16,7 @@ $(window).focus(function() {
         window_focus = true;
         }).blur(function() { console.log("blur came");
             window_focus = false;
+        counter = setInterval("ask()", 2000);
 });
 });
 

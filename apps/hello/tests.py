@@ -162,22 +162,7 @@ class TestEditForm(TestCase):
         self.assertEqual(self.client.get(reverse('edit')).status_code, 200)
         upload_file = open(os.path.join(STATICFILES_DIRS[0],
                                         'img', "test.jpg"), "rb")
-        # print os.path.join(STATICFILES_DIRS[0], 'img', "test.jpg"), 'exist'
         data = dict(
-            first_name="Test",
-            last_name="User",
-            birthday="1994-04-11",
-            bio="biography test user",
-            email="google321@google.com",
-            jabber="xxx321@jabber.org",
-            skype="qwerty 321",
-            other="qwerty drtreter rtyht h",
-            photo=SimpleUploadedFile(upload_file.name, upload_file.read())
-        )
-        response = self.client.post(reverse('edit'), data)
-        self.assertEqual(response.status_code, 200)
-        upload_file.seek(0)
-        data1 = dict(
             first_name="Olga",
             last_name="Test",
             birthday="2000-01-01",
@@ -188,16 +173,31 @@ class TestEditForm(TestCase):
             other="qwerty qwerty qwerty",
             photo=SimpleUploadedFile(upload_file.name, upload_file.read())
         )
-        response = self.client.post(reverse('edit'), data1,
+        response = self.client.post(reverse('edit'), data,
                                     HTTP_X_REQUESTED_WITH="XMLHttpRequest")
         self.assertEqual(response.status_code, 200)
         self.client.get(reverse('home'))
         self.assertEqual(self.client.get(reverse('home')).status_code, 200)
-        self.assertEqual(self.person.first_name, "Olga")
-        self.assertEqual(self.person.last_name, "Test")
-        self.assertEqual(self.person.birthday, "2000-01-01")
-        self.assertEqual(self.person.bio, "biography")
-        self.assertEqual(self.person.email, "google@google.com")
-        self.assertEqual(self.person.jabber, "xxx@jabber.org")
-        self.assertEqual(self.person.skype, "qwerty")
-        self.assertEqual(self.person.other, "qwerty qwerty qwerty")
+        self.assertEqual(self.person.first_name, data['first_name'])
+        self.assertEqual(self.person.last_name, data['last_name'])
+        self.assertEqual(self.person.birthday, data['birthday'])
+        self.assertEqual(self.person.bio, data['bio'])
+        self.assertEqual(self.person.email, data['email'])
+        self.assertEqual(self.person.jabber, data['jabber'])
+        self.assertEqual(self.person.skype, data['skype'])
+        self.assertEqual(self.person.other,  data['other'])
+
+    def test_show_errors(self):
+        self.client.post(reverse('login'), self.auth)
+        data = dict(
+            first_name='',
+            last_name='',
+            skype=''
+        )
+        response = self.client.post(reverse('edit'), data,
+                                    HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        self.assertContains(response, 'There were some errors')
+        self.assertContains(response, 'Please correct the following:')
+        self.assertContains(response, 'First Name: This field is required.')
+        self.assertContains(response, 'Last Name: This field is required.')
+        self.assertContains(response, 'Skype: This field is required.')

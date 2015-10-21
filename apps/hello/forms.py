@@ -29,8 +29,6 @@ class PersonEditForm(forms.ModelForm):
                 self.fields[field].widget = forms.Textarea(attrs={'rows': 4})
             else:
                 self.fields[field].widget.attrs['class'] = 'editform'
-            if not (field == 'photo'):
-                self.fields[field].widget.attrs['required'] = "required"
 
     def clean_birthday(self):
         birthday = self.cleaned_data['birthday']

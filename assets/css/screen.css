@@ -7,9 +7,10 @@ body {
     float: none;
     display: table-cell;
     padding-right: 50px;
-    width: 200px;
+    width: 220px;
     position: relative;
     left: 20px;
+    word-wrap: break-word;
 }
 
 .right-side {
@@ -17,7 +18,7 @@ body {
     display: table-cell;
     width: 200px;
     position: relative;
-    left: 20px;
+    left: 50px;
 }
 
 .container {
@@ -25,7 +26,6 @@ body {
     min-height: 1080px;
     color: #484848;
     margin: 0 100px;
-    /*padding: 20px;*/
     border: 0;
     outline: 0;
     font-size: 100%;
@@ -45,7 +45,6 @@ div.image-edit {
     padding: 0px;
     width: 229px;
     border: 3px solid rgb(72, 72, 72);
-    /*padding-top: 30px;*/
     margin: 0px;
 }
 
@@ -53,7 +52,6 @@ div.image-edit {
     width: 297px;
     height: 392px;
     border: 3px solid rgb(72, 72, 72);
-    /*width: 293px; height: 388px;*/
 }
 img {
     margin: 0px;
@@ -118,6 +116,12 @@ a {
     text-decoration: underline;
 }
 
+div.footer {
+    position: relative;
+    left: 10px;
+    padding: 10px 0 20px 0;
+}
+
 /*style for edit page*/
 #editform {
     width: 106px;
@@ -159,7 +163,6 @@ div#sendwrapper {
 .save {
     display: block;
     font-family: Georgia, serif;
-    /*width: 46px;*/
     height: 21px;
     padding: 0 6px;
     font-size: 16px;
@@ -186,8 +189,6 @@ div.ui-datepicker {
     max-height: 347px;
     padding: 15px 35px 45px;
     margin: 0 auto;
-    /*background-color: #fff;*/
-    /*border: 1px solid rgba(0, 0, 0, 0.1);*/
 }
 
 .form-signin-heading {
@@ -195,7 +196,6 @@ div.ui-datepicker {
 }
 
 .form-control {
-    /*position: relative;*/
     font-size: 16px;
     height: auto;
     padding: 10px;
@@ -215,7 +215,7 @@ input[type="password"] {
     border-top-right-radius: 0;
 }
 
-
+/* style for messages */
 strong.alert-success {
     color: #008000;
     background-color: inherit;
@@ -229,21 +229,14 @@ strong.alert-error, #errors {
     background-color: inherit;
 }
 div#result {
-    height: 25px;
+    height: 20px;
     float: inherit;
     position: relative;
     left: 20px;
 }
 
 div#errors {
-    min-height: 25px;
     float: inherit;
     position: relative;
     left: 20px;
-}
-div.footer {
-    /*float: inherit;*/
-    position: relative;
-    left: 10px;
-    padding: 10px 0 20px 0;
 }

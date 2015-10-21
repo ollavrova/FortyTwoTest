@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static staticfiles %}
+{% block title %}Edit page{% endblock %}
+{% block extra_head %}
+    {{ form.media }}
+    <script src="{% static 'js/jquery.form.js' %}"></script>
+    <script src="{% static 'js/load.js' %}"></script>
+{% endblock %}
+    {% block title-block %}
+            <div class="title left-side">
+                <h3>42 Coffee Cups Test Assignment</h3>
+            </div>
+            <div class="right-side">
+                <p>
+                <a href="{% url 'home' %}">Main page</a>
+                <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
+                </p>
+            </div>
+    {% endblock title-block %}
+{% block content %}
+
+            {% include 'hello/reload.html' %}
+{% endblock %}

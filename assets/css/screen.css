@@ -7,21 +7,25 @@ body {
     float: none;
     display: table-cell;
     padding-right: 50px;
-    width: 200px;
+    width: 220px;
+    position: relative;
+    left: 20px;
+    word-wrap: break-word;
 }
 
 .right-side {
     float: none;
     display: table-cell;
     width: 200px;
+    position: relative;
+    left: 50px;
 }
 
 .container {
     width: 1070px;
-    height: 1080px;
+    min-height: 1080px;
     color: #484848;
     margin: 0 100px;
-    padding: 0;
     border: 0;
     outline: 0;
     font-size: 100%;
@@ -30,8 +34,7 @@ body {
 
 .content {
     width: 800px;
-    height: 1070px;
-    background-image: url(http://framebox.org/static/images/cell10x10.gif);
+    background-color: white;
     padding: 20px;
     margin: 25px auto;
     word-wrap: break-word;
@@ -42,10 +45,27 @@ div.image-edit {
     padding: 0px;
     width: 229px;
     border: 3px solid rgb(72, 72, 72);
-    /*padding-top: 30px;*/
     margin: 0px;
 }
 
+.image {
+    width: 297px;
+    height: 392px;
+    border: 3px solid rgb(72, 72, 72);
+}
+img {
+    margin: 0px;
+    height: 392px;
+    padding: 0px;
+    width: 297px;
+}
+img.image-edit {
+    height: 314px;
+    padding: 0px;
+    width: 229px;
+    padding: 0px;
+    margin: 0px;
+}
 .title {
     width: 500px;
 }
@@ -80,4 +100,143 @@ p {
     font-size: 16px;
     font-family: Georgia, serif;
     line-height: 16px;
+}
+
+hr {
+    border-width: 3px 0;
+    margin: 18px 0;
+    width: 90%;
+    background-color: #FFFFFF;
+    border-top-style: solid;
+    border-top-color: rgb(72, 72, 72);
+    margin-top: 5px;
+}
+
+a {
+    text-decoration: underline;
+}
+
+div.footer {
+    position: relative;
+    left: 10px;
+    padding: 10px 0 20px 0;
+}
+
+/*style for edit page*/
+#editform {
+    width: 106px;
+    /*height: 14px;*/
+    text-align: right;
+    display: table-cell;
+}
+
+input {
+    height: 14px;
+    border: 1px solid rgb(153, 153, 153);
+    background-color: rgb(245, 240, 245);
+}
+
+input#id_photo {
+    width: 185px;
+}
+
+textarea {
+    display: table-cell;
+    padding: 5px;
+    color: rgb(0, 0, 0);
+    font-size: 14px;
+    text-align: left;
+    line-height: 1;
+    overflow: hidden;
+    margin: 0px;
+    width: 242px;
+    height: 112px;
+    border: 1px solid rgb(153, 153, 153);
+    background-color: rgb(245, 240, 245);
+}
+
+div#sendwrapper {
+    width: 10px;
+    padding-right: 15px;
+}
+
+.save {
+    display: block;
+    font-family: Georgia, serif;
+    height: 21px;
+    padding: 0 6px;
+    font-size: 16px;
+    color: #484848;
+}
+
+p.edit {
+    width: 108px;
+    height: 18px;
+}
+
+.wrapper {
+    margin-top: 80px;
+    margin-bottom: 80px;
+}
+
+div.ui-datepicker {
+ font-size:10px;
+}
+
+/*style for login form*/
+.form-signin {
+    width: 380px;
+    max-height: 347px;
+    padding: 15px 35px 45px;
+    margin: 0 auto;
+}
+
+.form-signin-heading {
+    margin-bottom: 30px;
+}
+
+.form-control {
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    color: #484848;
+@include box-sizing(border-box);
+}
+
+input#username[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+input[type="password"] {
+    margin-bottom: 20px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* style for messages */
+strong.alert-success {
+    color: #008000;
+    background-color: inherit;
+}
+strong.alert-error, #errors {
+    color: red;
+    background-color: inherit;
+}
+.alert-success {
+    color: #008000;
+    background-color: inherit;
+}
+div#result {
+    height: 20px;
+    float: inherit;
+    position: relative;
+    left: 20px;
+}
+
+div#errors {
+    float: inherit;
+    position: relative;
+    left: 20px;
 }

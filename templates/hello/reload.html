@@ -1,0 +1,61 @@
+<form enctype="multipart/form-data"
+              id="send-form" action="{% url 'edit' %}" method="post">
+
+{% csrf_token %}
+{% load thumbnail %}
+
+<div class="col-xs-9 left-side">
+    <p>Name: {{ form.first_name }}</p>
+
+    <p>Last Name: {{ form.last_name }}</p>
+
+    <p>Date of Birth: {{ form.birthday }}</p>
+
+    <p>Photo: {{ form.photo }}</p>
+
+    <div class="image-edit">
+        {% if person.photo %}
+            <img class="image-edit" src="{% thumbnail form.instance.photo 300x400 %}"/>
+        {% endif %}
+    </div>
+</div>
+<div class="col-xs-9 right-side">
+    <p>Contacts</p>
+
+    <p>Email: {{ form.email }}</p>
+
+    <p>Jabber: {{ form.jabber }}</p>
+
+    <p>Skype: {{ form.skype }}</p>
+
+    <p>Other contacts:
+
+    <div class="multiline">{{ form.other }}</div>
+    </p>
+    <p>Bio:
+
+    <div class="multiline">{{ form.bio }}</div>
+    </p>
+</div>
+
+<div id="result">
+</div>
+   <div id="errors" class="inner alert-error">
+{% if form.errors %}
+    <!-- Error messaging -->
+            <p>There were some errors in the information you entered. Please correct the following:</p>
+            {{ form.non_field_errors }}
+                {% for field in form %}
+                    {% if field.errors %}
+                         <p>{{ field.label }}: {{ field.errors|striptags }}</p> {% endif %}
+                {% endfor %}
+    <!-- /Error messaging -->
+{% endif %}
+</div>
+<div class="left-side" id="sendwrapper">
+    <input id="sendbutton" class="editform save" type="submit" value="Save"/>
+</div>
+<div class="right-side">
+    <a href="/">Cancel</a>
+</div>
+  </form>

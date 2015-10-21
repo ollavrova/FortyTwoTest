@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+        {% if form.errors %}
+            <p>Your username and password didn't match. Please try again.</p>
+        {% endif %}
+
+        <form class="login" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+            {% csrf_token %}
+            <div class="wrapper">
+                <form class="form-signin">
+                    <h3>Please login</h3>
+                    <p><input type="text" class="form-control" name="username" placeholder="username" required=""
+                           autofocus=""/></p>
+                    <p><input type="password" class="form-control" name="password" placeholder="password" required=""/></p>
+                    <p><button class="btn form-control" type="submit" value="login">Login</button></p>
+                    <input type="hidden" name="next" value="/edit/"/>
+                </form>
+            </div>
+        </form>
+{% endblock %}
+{% block footer %}{% endblock %}

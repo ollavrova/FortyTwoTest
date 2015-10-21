@@ -1,4 +1,7 @@
 from django.db import models
+from easy_thumbnails.fields import ThumbnailerImageField
+
+size = (200, 200)
 
 
 class Person(models.Model):
@@ -10,6 +13,11 @@ class Person(models.Model):
     jabber = models.CharField(max_length=100, verbose_name='Jabber')
     skype = models.CharField(max_length=100, verbose_name='Skype')
     other = models.TextField(verbose_name='Other contacts')
+    photo = ThumbnailerImageField(upload_to='uploads', blank=True, null=True,
+                                  resize_source=dict(size=size, sharpen=True))
+
+    def __unicode__(self):
+        return "{0} {1}".format(self.first_name, self.last_name)
 
 
 class Requests(models.Model):

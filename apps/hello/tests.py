@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import os
+from django.core.files.uploadedfile import SimpleUploadedFile
+from fortytwo_test_task.settings import STATICFILES_DIRS
 from apps.hello.models import Person, Requests
 from django.core.urlresolvers import reverse
 from django.test import TestCase
@@ -131,3 +134,77 @@ class TestMiddleware(TestCase):
                          Requests.objects.latest('timestamp').request_path)
         count2 = Requests.objects.all().count()
         self.assertEqual(count2, count1+2)
+
+
+class TestEditForm(TestCase):
+    def setUp(self):
+        self.auth = {"username": "admin", "password": "admin"}
+
+    def test_auth(self):
+        """
+        testing auth to edit page
+        """
+        self.assertEqual(self.client.get(reverse('logout')).status_code, 302)
+        self.assertEqual(self.client.get(reverse('home')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('req')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('edit')).status_code, 302)
+        self.client.post(reverse('login'), self.auth)
+        self.assertEqual(self.client.get(reverse('edit')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('logout')).status_code, 302)
+        self.assertEqual(self.client.get(reverse('edit')).status_code, 302)
+
+    def test_editform(self):
+        """
+        test edit form
+        """
+        self.client.post(reverse('login'), self.auth)
+        self.assertEqual(self.client.get(reverse('edit')).status_code, 200)
+        upload_file = open(os.path.join(STATICFILES_DIRS[0],
+                                        'img', "test.jpg"), "rb")
+        data = dict(
+            first_name="Olga",
+            last_name="Test",
+            birthday="2000-01-01",
+            bio="biography",
+            email="google@google.com",
+            jabber="xxx@jabber.org",
+            skype="qwerty",
+            other="qwerty qwerty qwerty",
+            photo=SimpleUploadedFile(upload_file.name, upload_file.read())
+        )
+        response = self.client.post(reverse('edit'), data=data,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        response1 = self.client.get(reverse('edit'))
+        self.assertContains(response1, data['first_name'])
+        self.assertContains(response1, data['last_name'])
+        self.assertContains(response1, data['bio'])
+        self.assertContains(response1, data['email'])
+        self.assertContains(response1, data['skype'])
+        self.assertContains(response1, data['other'])
+        response2 = self.client.get(reverse('home'))
+        self.assertEqual(response2.status_code, 200)
+        self.assertContains(response2, data['first_name'])
+        self.assertContains(response2, data['last_name'])
+        self.assertContains(response2, data['bio'])
+        self.assertContains(response2, data['email'])
+        self.assertContains(response2, data['skype'])
+        self.assertContains(response2, data['other'])
+
+    def test_show_errors(self):
+        """
+        test for checking show errors
+        """
+        self.client.post(reverse('login'), self.auth)
+        data = dict(
+            first_name='',
+            last_name='',
+            skype=''
+        )
+        response = self.client.post(reverse('edit'), data,
+                                    HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        self.assertContains(response, 'There were some errors')
+        self.assertContains(response, 'Please correct the following:')
+        self.assertContains(response, 'First Name: This field is required.')
+        self.assertContains(response, 'Last Name: This field is required.')
+        self.assertContains(response, 'Skype: This field is required.')

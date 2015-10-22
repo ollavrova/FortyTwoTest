@@ -27,7 +27,7 @@ class Person(models.Model):
 
     def save(self, *args, **kw):
         if self.pk is not None:
-            orig = Person.objects.first()
+            orig = Person.objects.get(pk=self.pk)
             if (orig.first_name != self.first_name) or \
                     (orig.last_name != self.last_name) or \
                     (orig.bio != self.bio) or \

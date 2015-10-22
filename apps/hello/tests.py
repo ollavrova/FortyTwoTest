@@ -271,15 +271,12 @@ class TestSignalProcessor(TestCase):
         """
         testing signals after any db action
         """
-        self.client.get(reverse('home'))
-        self.assertEqual(self.client.get(reverse('home')).status_code, 200)
         response = self.client.get(reverse('home'))
+        self.assertEqual(response.status_code, 200)
         self.assertTrue("Olga" in response.content)
-        self.assertTrue(Journal.objects.filter(id_item=self.person.pk))
         self.assertTrue((Journal.objects.filter(
             id_item=self.person.pk)[0]).action == 'create')
         self.client.post(reverse('login'), self.auth)
-        self.assertEqual(self.client.get(reverse('edit')).status_code, 200)
         data = dict(
             pk=1,
             first_name="Test",
@@ -291,9 +288,17 @@ class TestSignalProcessor(TestCase):
             skype="qwerty 321",
             other="qwerty drtreter rtyht h"
         )
-        response = self.client.post(reverse('edit'), data)
+        response = self.client.post(reverse('edit'), data=data,
+                                    HTTP_X_REQUESTED_WITH="XMLHttpRequest")
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(Journal.objects.filter(id_item=self.person.pk,
+        # check editing signal
+        self.assertTrue(Journal.objects.filter(id_item=1,
+                                               model_name=Person.__name__,
+                                               action='edit'))
+        # check creating Requests entry
+        response = self.client.get(reverse('req'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Journal.objects.filter(model_name=Requests.__name__,
                                                action='create'))
 
 

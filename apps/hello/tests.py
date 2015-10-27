@@ -52,30 +52,6 @@ class TestShowPage(TestCase):
         self.assertEqual(self.person.other, "прочая информация")
 
 
-class TestPage(TestCase):
-    fixtures = ['test.json', ]  # loading test fixtures
-
-    def setUp(self):
-        self.person = Person.objects.first()
-
-    def test_check_page(self):
-        """
-        test check show info on main page with test fixtures
-        """
-        response = self.client.get(reverse('home'))
-        self.assertContains(response, "42 Coffee Cups Test Assignment",
-                            status_code=200)
-        self.assertContains(response, "Test", status_code=200)
-        self.assertContains(response, "TestTest", status_code=200)
-        self.assertContains(response,
-                            "born in 1900, study: school 1955-1995 years",
-                            status_code=200)
-        self.assertContains(response, "test@gmail.com", status_code=200)
-        self.assertContains(response, "test@jabber.ru", status_code=200)
-        self.assertContains(response, "test_skype", status_code=200)
-        self.assertContains(response, "test test", status_code=200)
-
-
 class TestEmptyBase(TestCase):
     def setUp(self):
         self.person = Person.objects.first()

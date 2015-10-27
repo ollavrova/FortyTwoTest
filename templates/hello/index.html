@@ -42,10 +42,10 @@
                     <p>Jabber: {{ person.jabber }}</p>
                     <p>Skype: {{ person.skype }}</p>
                     <p>Other contacts:
-                    <div class="multiline">{{ person.other }} </div>
+                    <div class="multiline">{{ person.other|linebreaks  }} </div>
                     </p>
                     <p>Bio:
-                    <div class="multiline">{{ person.bio }} </div>
+                    <div class="multiline">{{ person.bio|linebreaks  }} </div>
                     </p>
                 </div>
             {% else %}

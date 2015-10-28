@@ -8,6 +8,16 @@ class TestShowPage(TestCase):
 
     def setUp(self):
         self.person = Person.objects.first()
+        self.person1 = Person.objects.create(
+            first_name="Olla",
+            last_name="LLL",
+            birthday="1990-01-01",
+            bio="biography",
+            email="google@google.com",
+            jabber="xxx@jabber.org",
+            skype="qwerty",
+            other="qwerty qwerty qwerty",
+        )
 
     def test_show_page(self):
         """
@@ -50,6 +60,22 @@ class TestShowPage(TestCase):
         self.assertEqual(self.person.last_name, "Лаврова")
         self.assertEqual(self.person.bio, "Школа, садик, институт.")
         self.assertEqual(self.person.other, "прочая информация")
+
+    def test_2_row(self):
+        """
+        test case if db has 2 records
+        """
+        self.assertEqual(Person.objects.count(), 2)
+        response = self.client.get(reverse('home'))
+        self.assertNotContains(response, self.person1.first_name,
+
+                               status_code=200)
+        self.assertNotContains(response, self.person1.last_name)
+        self.assertNotContains(response, self.person1.bio)
+        self.assertNotContains(response, self.person1.email)
+        self.assertNotContains(response, self.person1.jabber)
+        self.assertNotContains(response, self.person1.skype)
+        self.assertNotContains(response, self.person1.other)
 
 
 class TestEmptyBase(TestCase):

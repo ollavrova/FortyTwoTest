@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, url
 from django.contrib import admin
+from apps.hello.views import HomeView
 from fortytwo_test_task import settings
 from django.conf.urls.static import static
 
@@ -7,7 +8,7 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    url(r'^$', 'apps.hello.views.home', name='home'),
+    url(r'^$', HomeView.as_view(), name='home'),
     url(r'^requests/', 'apps.hello.views.req', name='req'),
     url(r'^edit/', 'apps.hello.views.edit', name='edit'),
     url(r'^accounts/login/$',

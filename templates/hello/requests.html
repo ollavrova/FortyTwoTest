@@ -9,13 +9,13 @@
 {% block title %} Requests list{% endblock %}
 {% block title-block %}{% endblock %}
 
-{% block content %}
+{% block content %} {% csrf_token %}
     <h3 class="main-title"> Requests list:</h3>
-    <input id="request_old_count" value="{{ old_count }}" type="hidden"/>
+    <input id="request_old_time" value='{{ old_time|date:"Y-m-d H:i:s" }}' type="hidden"/>
+    <input id="result" value='0' type="hidden" />
+    <input id="result_upload" value='{{ result }}' type="hidden"/>
     <p>
     <hr/> </p>
-    <span id="result" style="display: None"></span>
-    <span id="result_upload"></span>
         {% for row in object_list %}
             <p>{{ row.id }}. request from {{ row.timestamp|date:'H:i d N Y' }}:
                   <p>  {{ row.request_method }}, {{ row.request_path }} </p>

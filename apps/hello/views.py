@@ -23,18 +23,20 @@ class HomeView(TemplateView):
 
 def req(request):
     logger.info(request.GET)
-    if request.method == 'GET' and request.is_ajax():
+    if request.method == 'POST' and request.is_ajax():
         try:
             start = datetime.datetime.strptime(request.GET.get('old_time', ''),
                                                '%Y-%m-%d %H:%M:%S')
             delta = Requests.objects.filter(
                 timestamp__range=[start,
-                                  datetime.datetime.now()]).count()
+                                  datetime.datetime.now()]).exclude(
+                request_method='POST', request_path='/requests/').count()
         except Exception as e:
             delta = e.message
             logger.error(e.message)
-        logger.info('check requests:'+str({'new': delta}))
         timedata = DateFormat(datetime.datetime.now()).format('Y-m-d H:i:s')
+        logger.info('check requests:'+str({'new': delta}))
+        #  str({'old count': Requests.objects.count() - delta}))
         return HttpResponse(json.dumps({'result': delta,
                                         'old_time': timedata}),
                             content_type="application/json")

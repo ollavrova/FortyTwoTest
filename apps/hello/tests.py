@@ -305,8 +305,16 @@ class TestCustomerRequest(TestCase):
             priority=1,
         )
 
-    def test_priority(self):
+    def test_if_priority_exist(self):
         """
         testing priority for saved requests - task from customer requests
         """
         self.assertEqual(self.req.priority, 1)
+
+    def test_show_priority(self):
+        """
+        check if show request with priority
+        """
+        response = self.client.get(reverse('req'))
+        self.assertEqual(self.client.get(reverse('req')).status_code, 200)
+        self.assertContains(response, str(self.req.id)+'. request from ')

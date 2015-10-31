@@ -63,7 +63,7 @@ $(window).focus(function() {
                         res = reset + result_upload;
                     }
                     ;
-                    console.log(data.old_time + ' new requests - ' + result_upload + 'result = ' + res);
+                    console.log(data.old_time + ' new requests - ' + result_upload + ', result = ' + res);
                     // add number in title
                     if (res) {
                         $('title').text('(' + res + ') Requests list');

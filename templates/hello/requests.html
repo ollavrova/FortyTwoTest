@@ -11,7 +11,7 @@
 
 {% block content %} {% csrf_token %}
     <h3 class="main-title"> Requests list:</h3>
-    <input id="request_old_time" value='{{ old_time|date:"Y-m-d H:i:s" }}' type="hidden"/>
+    <input id="get_time" value="{{ old_time }}" type="hidden"/>
     <input id="result" value='0' type="hidden" />
     <input id="result_upload" value='{{ result }}' type="hidden"/>
     <p>

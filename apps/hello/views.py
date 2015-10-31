@@ -22,29 +22,30 @@ class HomeView(TemplateView):
 
 
 def req(request):
-    logger.info(request.GET)
     if request.method == 'POST' and request.is_ajax():
         try:
-            start = datetime.datetime.strptime(request.GET.get('old_time', ''),
-                                               '%Y-%m-%d %H:%M:%S')
+            get_time = json.loads(request.body)['old_time']
+            start = datetime.datetime.strptime(get_time,
+                                               '%Y-%m-%d %H:%M:%S.%f')
             delta = Requests.objects.filter(
-                timestamp__range=[start,
-                                  datetime.datetime.now()]).exclude(
-                request_method='POST', request_path='/requests/').count()
+                timestamp__gt=start,
+                timestamp__lt=datetime.datetime.now()).exclude(
+                request_method='POST',
+                request_path='/requests/').count()
+            logger.info('check requests:'+str({'new': delta}))
         except Exception as e:
             delta = e.message
-            logger.error(e.message)
-        timedata = DateFormat(datetime.datetime.now()).format('Y-m-d H:i:s')
-        logger.info('check requests:'+str({'new': delta}))
-        #  str({'old count': Requests.objects.count() - delta}))
+            logger.error(delta)
+        timedata = DateFormat(datetime.datetime.now()).format('Y-m-d H:i:s.u')
         return HttpResponse(json.dumps({'result': delta,
                                         'old_time': timedata}),
                             content_type="application/json")
     else:
         query = Requests.objects.order_by('timestamp')[:10]
         timedata = DateFormat(Requests.objects.latest('timestamp').
-                              timestamp).format('Y-m-d H:i:s')
+                              timestamp).format('Y-m-d H:i:s.u')
         response = TemplateResponse(request, 'hello/requests.html',
                                     {'object_list': query,
-                                     'old_time': timedata})
+                                     'old_time': timedata,
+                                     'result': 0})
     return response

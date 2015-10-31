@@ -1,20 +1,29 @@
  /*<![CDATA[*/
 $(document).ready(function() {
     var counter = false;
-    var old_time;
-    var csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
 
-    // setup ajax post, add csrftoken
-    function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-    $.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
+$.ajaxSetup({
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             // Only send the token to relative URLs i.e. locally.
+             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+     }
 });
 
 $(window).focus(function() {
@@ -27,7 +36,6 @@ $(window).focus(function() {
             $('title').text('Requests list');
         }).blur(function() {
             console.log("blur came");
-            old_time = new Date().toJSON().replace('T', ' ').slice(0,-1);
         counter = setInterval("ask()", 3000);
 });
 });
@@ -36,33 +44,35 @@ $(window).focus(function() {
     $.ajax({
             type: "POST",
             url: "/requests/",
-            data: { old_time: $("#request_old_time").val().trim(),
-            'csrfmiddlewaretoken': $('#csrfmiddlewaretoken').val(),
-                },
+            data: JSON.stringify({
+                old_time: $("#get_time").val(),
+                csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()}),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
                 // check old count of new requests if exists
-                reset1 = parseInt($('#result').val(), 10);
-                console.log('old result = ' + reset1);
+                reset = parseInt($('#result').val(), 10);
                 // write new count
                 $('#result_upload').val(data.result);
-                reset2 = parseInt($('#result_upload').val(), 10);
+                result_upload = parseInt($('#result_upload').val(), 10);
                 // add old and new number
-                if (!reset1) {
-                    res = reset2;
-                } else {
-                    res = reset1 + reset2;
-                };
-                console.log('new requests - '+ reset2);
-                console.log('result = ' + res);
-                // add number in title
-                if (res) {
-                    $('title').text('('+ res +') Requests list');
-                    // update time of calculation
-                    $("#request_old_time").val(data.old_time);
-                    // update result count
-                    $("#result").val(res);
+                if (result_upload) {
+                    if (!reset) {
+                        res = result_upload;
+                    } else {
+                        res = reset + result_upload;
+                    }
+                    ;
+                    console.log(data.old_time + ' new requests - ' + result_upload + 'result = ' + res);
+                    // add number in title
+                    if (res) {
+                        $('title').text('(' + res + ') Requests list');
+                        // update result count
+                        $("#result").val(res);
+                        // update time of calculation
+                        $("#get_time").val(data.old_time);
+                    }
+                    ;
                 };
             },
             error: function (jqxhr, textStatus, error) {
@@ -72,5 +82,4 @@ $(window).focus(function() {
             }
         });
 };
-
 /*]]>*/

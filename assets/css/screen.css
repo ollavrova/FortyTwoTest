@@ -30,8 +30,7 @@ body {
 
 .content {
     width: 800px;
-    height: 1070px;
-    background-image: url(http://framebox.org/static/images/cell10x10.gif);
+    background-color: white;
     padding: 20px;
     margin: 25px auto;
     word-wrap: break-word;
@@ -42,7 +41,6 @@ div.image-edit {
     padding: 0px;
     width: 229px;
     border: 3px solid rgb(72, 72, 72);
-    /*padding-top: 30px;*/
     margin: 0px;
 }
 
@@ -80,4 +78,24 @@ p {
     font-size: 16px;
     font-family: Georgia, serif;
     line-height: 16px;
+}
+
+hr {
+    border-width: 3px 0;
+    margin: 18px 0;
+    width: 90%;
+    background-color: #FFFFFF;
+    border-top-style: solid;
+    border-top-color: rgb(72, 72, 72);
+    margin-top: 5px;
+}
+
+a {
+    text-decoration: underline;
+}
+
+div.footer {
+    position: relative;
+    left: 10px;
+    padding: 10px 0 20px 0;
 }

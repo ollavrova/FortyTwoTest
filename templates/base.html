@@ -10,6 +10,16 @@
 <body id="{% block body_id %}{% endblock %}" class="container {% block body_class %}{% endblock %}">
 <div class="content">
     {% block content %}{% endblock content %}
+    {% block footer %}
+        <div  class="footer">
+            <div class="hr">
+                <hr/>
+            </div>
+            <div class="col-md-4">
+                <p><a href="{% url 'req' %}">requests</a></p>
+            </div>
+        </div>
+    {% endblock %}
 </div>
 </body>
 </html>

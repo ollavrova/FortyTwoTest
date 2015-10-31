@@ -1,8 +1,8 @@
+from apps.hello.views import HomeView
 from django.conf.urls import patterns, url
 from django.contrib import admin
-from apps.hello.views import HomeView
-from fortytwo_test_task import settings
 from django.conf.urls.static import static
+from fortytwo_test_task import settings
 
 admin.autodiscover()
 

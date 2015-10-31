@@ -1,11 +1,13 @@
 import json
 import logging
+import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.response import TemplateResponse
+from django.utils.dateformat import DateFormat
 from apps.hello.forms import PersonEditForm
 from apps.hello.models import Person, Requests
 from django.views.generic import TemplateView
@@ -25,27 +27,33 @@ class HomeView(TemplateView):
 
 
 def req(request):
-    logger.info(request.GET)
-    if request.is_ajax():
+    if request.method == 'POST' and request.is_ajax():
         try:
-            start = int(request.GET.get('request_old_count'))
-            end = int(request.new_count)
-            delta = end - start
-            delta_list = range(start, end)
+            get_time = json.loads(request.body)['old_time']
+            start = datetime.datetime.strptime(get_time,
+                                               '%Y-%m-%d %H:%M:%S.%f')
+            delta = Requests.objects.filter(
+                timestamp__gt=start,
+                timestamp__lt=datetime.datetime.now()).exclude(
+                request_method='POST',
+                request_path='/requests/').count()
+            if delta:
+                logger.info('check requests:'+str({'new': delta}))
         except Exception as e:
             delta = e.message
-            logger.error(e.message)
-        logger.info('check requests:'+str({'result': delta}))
+            logger.error(delta)
+        timedata = DateFormat(datetime.datetime.now()).format('Y-m-d H:i:s.u')
         return HttpResponse(json.dumps({'result': delta,
-                                        'delta_list': delta_list,
-                                        'result_upload': delta_list}),
+                                        'old_time': timedata}),
                             content_type="application/json")
     else:
-        count = Requests.objects.all().count()
         query = Requests.objects.order_by('timestamp')[:10]
+        timedata = DateFormat(Requests.objects.latest('timestamp').
+                              timestamp).format('Y-m-d H:i:s.u')
         response = TemplateResponse(request, 'hello/requests.html',
                                     {'object_list': query,
-                                     'old_count': count})
+                                     'old_time': timedata,
+                                     'result': 0})
     return response
 
 

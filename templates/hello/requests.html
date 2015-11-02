@@ -12,18 +12,15 @@
 {% block content %} {% csrf_token %}
     <h3 class="main-title"> Requests list:</h3>
     <input id="get_time" value="{{ old_time }}" type="hidden"/>
-    <input id="result" value='0' type="hidden" />
+    <input id="result" value='0' type="hidden"/>
     <input id="result_upload" value='{{ result }}' type="hidden"/>
-    <p>
-    <hr/> </p>
-        {% for row in object_list %}
-            <p>{{ row.id }}. request from {{ row.timestamp|date:'H:i d N Y' }}:
-                  <p>  {{ row.request_method }}, {{ row.request_path }} </p>
-            </p>
-            <p>
-            <hr/>
-            </p>
-        {% endfor %}
+    <p> <hr/> </p>
+    {% for row in object_list %}
+        <p>{{ row.id }}. request from {{ row.timestamp|date:'H:i d N Y' }}:
+            <p>{{ row.request_method }}, {{ row.request_path }} </p>
+        </p>
+        <p> <hr/> </p>
+    {% endfor %}
 {% endblock %}
 
 {% block footer %}

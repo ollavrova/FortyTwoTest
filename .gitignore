@@ -15,4 +15,4 @@ media
 static
 *.dat
 .venv
-.log
+log

@@ -8,6 +8,8 @@ from apps.hello.models import Person, Requests, Journal
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from StringIO import StringIO
+from django.test import TestCase, LiveServerTestCase
+from selenium import webdriver
 
 
 class TestShowPage(TestCase):
@@ -303,25 +305,84 @@ class TestSignalProcessor(TestCase):
         self.assertTrue(Journal.objects.filter(model_name=Requests.__name__,
                                                action='create'))
 
-
-class TestCustomerRequest(TestCase):
+class TestCustomerRequest1(TestCase):
 
     def setUp(self):
-        self.req = Requests.objects.create(
+        self.browser = webdriver.PhantomJS()
+        self.req1 = Requests.objects.create(
             row='dlfkgndlfkgndflkgndflkgndlfgndlfgndflgkndflg fdg dflgd',
             priority=1,
         )
+        self.req2 = Requests.objects.create(
+            row='dlfkgndlfkgndflkgndfgkljlklllllllndflgkndflg fdg dflgd',
+            priority=0,
+        )
 
-    def test_if_priority_exist(self):
-        """
-        testing priority for saved requests - task from customer requests
-        """
-        self.assertEqual(self.req.priority, 1)
-
-    def test_show_priority(self):
+    def test_priority(self):
         """
         check if show request with priority
         """
+        # set max priority to record
+        max_priority = Requests.objects.order_by('-priority')[0].priority
+        self.req1.priority = max_priority+1
+        self.req1.save()
         response = self.client.get(reverse('req'))
+
+        # check if record is first in list in context
+        self.assertEqual(response.context['object_list'][0], self.req)
         self.assertEqual(self.client.get(reverse('req')).status_code, 200)
+        # check if equal
+        self.assertSequenceEqual(Requests.objects.order_by(
+            '-priority', 'timestamp')[:10],
+                                 response.context['object_list']
+                                 )
         self.assertContains(response, str(self.req.id)+'. request from ')
+        html1 = '<p class="item-1">'+self.req1.id+'. request from'
+        html2 = '<p class="item-2">'+self.req2.id+'. request from'
+        self.assertContains(response, html1)
+        self.assertContains(response, html2)
+
+
+class TestCustomerRequest(LiveServerTestCase):
+    """
+    set of selenium tests
+    """
+
+    def setUp(self):
+        self.browser = webdriver.PhantomJS()
+        self.req1 = Requests.objects.create(
+            row='dlfkgndlfkgndflkgndflkgndlfgndlfgndflgkndflg fdg dflgd',
+            priority=1,
+        )
+        self.req2 = Requests.objects.create(
+            row='dlfkgndlfkgndflkgndflkgndlfgndlfgndflgkndflg fdg dflgd',
+            priority=0,
+        )
+
+    def tearDown(self):
+        self.browser.quit()
+
+    def test_priority(self):
+        """
+        check if show request with priority
+        """
+        self.browser.get(self.live_server_url + '/requests')
+        title = self.browser.find_element_by_class_name('main-title')
+        self.assertTrue(title.is_displayed())
+        self.assertTrue(title.text == 'Requests list:')
+        body = self.browser.find_element_by_tag_name('body')
+        self.assertIn(body.text, 'request from')
+        # check html in body
+        html1 = '<p class="item-1">'+str(self.req1.id)+'. request from'
+        html2 = '<p class="item-2">'+str(self.req2.id)+'. request from'
+        self.assertContains(body.text, html1)
+        self.assertContains(body.text, html2)
+        # check order on the page
+        css_selector1 = '#request-list:first-child'
+        css_selector2 = '#request-list:ntn-child(2)'
+        first = self.browser.find_element_by_css_selector(css_selector1)
+        second = self.browser.find_element_by_css_selector(css_selector2)
+        self.assertTrue(first.is_displayed())
+        self.assertContains(first, self.req1.timestamp)
+        self.assertTrue(second.is_displayed())
+        self.assertContains(second, self.req2.timestamp)

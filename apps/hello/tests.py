@@ -379,7 +379,7 @@ class TestCustomerRequest(LiveServerTestCase):
         self.assertContains(body.text, html2)
         # check order on the page
         css_selector1 = '#request-list:first-child'
-        css_selector2 = '#request-list:ntn-child(2)'
+        css_selector2 = '#request-list:nth-child(2)'
         first = self.browser.find_element_by_css_selector(css_selector1)
         second = self.browser.find_element_by_css_selector(css_selector2)
         self.assertTrue(first.is_displayed())

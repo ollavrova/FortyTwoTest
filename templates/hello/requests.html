@@ -20,7 +20,7 @@
         <p class="item-{{ forloop.counter }}">{{ row.id }}. request from {{ row.timestamp|date:'H:i:s.u d N Y' }}:
         {{ row.request_method }}, {{ row.request_path }}, priority ={{ row.priority }}
         </p>
-        <hr/>
+
     {% endfor %}
 </div>
 {% endblock %}

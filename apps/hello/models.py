@@ -25,21 +25,6 @@ class Person(models.Model):
     photo = ThumbnailerImageField(upload_to='uploads', blank=True, null=True,
                                   resize_source=dict(size=size, sharpen=True))
 
-    def save(self, *args, **kw):
-        if self.pk is not None:
-            orig = Person.objects.get(pk=self.pk)
-            if (orig.first_name != self.first_name) or \
-                    (orig.last_name != self.last_name) or \
-                    (orig.bio != self.bio) or \
-                    (orig.birthday != self.birthday) or \
-                    (orig.email != self.email) or \
-                    (orig.jabber != self.jabber) or \
-                    (orig.skype != self.skype) or \
-                    (orig.other != self.other) or \
-                    (orig.photo != self.photo):
-                my_callback_save(Person, orig, post_save, update_fields=True)
-        super(Person, self).save(*args, **kw)
-
 
 class Requests(models.Model):
     row = models.CharField(max_length=1000)
@@ -61,18 +46,17 @@ class Journal(models.Model):
         return str(self.id)
 
 
-@receiver(post_save, sender=Requests)   # NOQA
-@receiver(post_save, sender=Person)
-def my_callback_save(sender, instance, signal, *args, **kwargs):
-    if 'created' in kwargs:
-        if kwargs['created']:
+@receiver(post_save)
+def set_winner(sender, instance=None, created=False, **kwargs):
+    list_of_models = ('Requests', 'Person')
+    if sender.__name__ in list_of_models:
+        if created:
             entry = Journal(model_name=sender.__name__,
                             action=ACTION[2][1],
                             timestamp=datetime.datetime.now(),
                             id_item=instance.id)
             entry.save()
-    else:
-        if kwargs['update_fields']:
+        else:
             entry = Journal(model_name=sender.__name__,
                             action=ACTION[1][1],
                             timestamp=datetime.datetime.now(),

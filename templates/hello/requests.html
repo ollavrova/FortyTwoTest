@@ -14,17 +14,15 @@
     <input id="get_time" value="{{ old_time }}" type="hidden"/>
     <input id="result" value='0' type="hidden"/>
     <input id="result_upload" value='{{ result }}' type="hidden"/>
-
-    <p> <hr/> </p>
-
+    <hr/>
+<div id="request-list">
     {% for row in object_list %}
-        <p>{{ row.id }}. request from {{ row.timestamp|date:'H:i d N Y' }}:
-            <p>  {{ row.request_method }}, {{ row.request_path }} </p>
-            <p>  priority ={{ row.priority }} </p>
+        <p class="item-{{ forloop.counter }}">{{ row.id }}. request from {{ row.timestamp|date:'H:i:s.u d-m-Y' }}:
+        {{ row.request_method }}, {{ row.request_path }}, priority ={{ row.priority }}
         </p>
-        <p> <hr/> </p>
-    {% endfor %}
 
+    {% endfor %}
+</div>
 {% endblock %}
 
 {% block footer %}

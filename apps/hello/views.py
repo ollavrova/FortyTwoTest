@@ -22,7 +22,6 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         context['person'] = Person.objects.first()
-        context['user'] = self.request.user
         return context
 
 
@@ -47,7 +46,7 @@ def req(request):
                                         'old_time': timedata}),
                             content_type="application/json")
     else:
-        query = Requests.objects.order_by('timestamp')[:10]
+        query = Requests.objects.order_by('-priority', 'timestamp')[:10]
         timedata = DateFormat(Requests.objects.latest('timestamp').
                               timestamp).format('Y-m-d H:i:s.u')
         response = TemplateResponse(request, 'hello/requests.html',

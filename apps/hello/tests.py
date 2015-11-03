@@ -336,8 +336,8 @@ class TestCustomerRequest1(TestCase):
                 str(self.req1.timestamp)
         html2 = '<p class="item-2">'+str(self.req2.id)+'. request from ' + \
                 str(self.req2.timestamp)
-        self.assertContains(response, html1)
-        self.assertContains(response, html2)
+        self.assertIn(response, html1)
+        self.assertIn(response, html2)
 
 
 class TestCustomerRequest(LiveServerTestCase):
@@ -375,4 +375,4 @@ class TestCustomerRequest(LiveServerTestCase):
         first = self.browser.find_element_by_css_selector(css_selector1)
         second = self.browser.find_element_by_css_selector(css_selector2)
         self.assertTrue(first.is_displayed())
-        self.assertContains(str(first), str(self.req1.timestamp))
+        self.assertIn(str(first), str(self.req1.timestamp))

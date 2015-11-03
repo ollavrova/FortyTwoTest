@@ -332,10 +332,10 @@ class TestCustomerRequest1(TestCase):
         # check if record is first in list in context
         self.assertEqual(response.context['object_list'][0], self.req1)
         self.assertEqual(self.client.get(reverse('req')).status_code, 200)
-        html1 = '<p class="item-1">'+self.req1.id+'. request from ' + \
-                self.req1.timestamp
-        html2 = '<p class="item-2">'+self.req2.id+'. request from ' + \
-                self.req2.timestamp
+        html1 = '<p class="item-1">'+str(self.req1.id)+'. request from ' + \
+                str(self.req1.timestamp)
+        html2 = '<p class="item-2">'+str(self.req2.id)+'. request from ' + \
+                str(self.req2.timestamp)
         self.assertContains(response, html1)
         self.assertContains(response, html2)
 
@@ -375,4 +375,4 @@ class TestCustomerRequest(LiveServerTestCase):
         first = self.browser.find_element_by_css_selector(css_selector1)
         second = self.browser.find_element_by_css_selector(css_selector2)
         self.assertTrue(first.is_displayed())
-        self.assertContains(first, self.req1.timestamp)
+        self.assertContains(str(first), str(self.req1.timestamp))

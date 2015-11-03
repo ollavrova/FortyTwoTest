@@ -372,8 +372,8 @@ class TestCustomerRequest(LiveServerTestCase):
         body = self.browser.find_element_by_tag_name('body')
         self.assertIn('request from', body.text)
         # check order on the page
-        css_selector1 = '#request-list:first-child'
-        css_selector2 = '#request-list:nth-child(2)'
+        css_selector1 = '#request-list p:first-child'
+        css_selector2 = '#request-list p:nth-child(2)'
         first = self.browser.find_element_by_css_selector(css_selector1)
         second = self.browser.find_element_by_css_selector(css_selector2)
         self.assertTrue(first.is_displayed())

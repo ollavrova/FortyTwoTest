@@ -305,6 +305,7 @@ class TestSignalProcessor(TestCase):
         self.assertTrue(Journal.objects.filter(model_name=Requests.__name__,
                                                action='create'))
 
+
 class TestCustomerRequest1(TestCase):
 
     def setUp(self):
@@ -329,7 +330,7 @@ class TestCustomerRequest1(TestCase):
         response = self.client.get(reverse('req'))
 
         # check if record is first in list in context
-        self.assertEqual(response.context['object_list'][0], self.req)
+        self.assertEqual(response.context['object_list'][0], self.req1)
         self.assertEqual(self.client.get(reverse('req')).status_code, 200)
         # check if equal
         self.assertSequenceEqual(Requests.objects.order_by(
@@ -371,7 +372,7 @@ class TestCustomerRequest(LiveServerTestCase):
         self.assertTrue(title.is_displayed())
         self.assertTrue(title.text == 'Requests list:')
         body = self.browser.find_element_by_tag_name('body')
-        self.assertIn(body.text, 'request from')
+        self.assertIn('request from', body.text)
         # check html in body
         html1 = '<p class="item-1">'+str(self.req1.id)+'. request from'
         html2 = '<p class="item-2">'+str(self.req2.id)+'. request from'

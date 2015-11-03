@@ -17,7 +17,7 @@
     <hr/>
 <div id="request-list">
     {% for row in object_list %}
-        <p class="item-{{ forloop.counter }}">{{ row.id }}. request from {{ row.timestamp|date:'H:i:s.u d N Y' }}:
+        <p class="item-{{ forloop.counter }}">{{ row.id }}. request from {{ row.timestamp|date:'H:i:s.u d-m-Y' }}:
         {{ row.request_method }}, {{ row.request_path }}, priority ={{ row.priority }}
         </p>
 

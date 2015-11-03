@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.utils.dateformat import DateFormat
 import os
 from django.core import management
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -6,7 +7,6 @@ from django.template import Context, Template
 from fortytwo_test_task.settings import STATICFILES_DIRS
 from apps.hello.models import Person, Requests, Journal
 from django.core.urlresolvers import reverse
-from django.test import TestCase
 from StringIO import StringIO
 from django.test import TestCase, LiveServerTestCase
 from selenium import webdriver
@@ -316,7 +316,7 @@ class TestCustomerRequest1(TestCase):
         )
         self.req2 = Requests.objects.create(
             row='dlfkgndlfkgndflkgndfgkljlklllllllndflgkndflg fdg dflgd',
-            priority=0,
+            priority=1,
         )
 
     def test_priority(self):
@@ -328,16 +328,17 @@ class TestCustomerRequest1(TestCase):
         self.req1.priority = max_priority+1
         self.req1.save()
         response = self.client.get(reverse('req'))
-
         # check if record is first in list in context
         self.assertEqual(response.context['object_list'][0], self.req1)
         self.assertEqual(self.client.get(reverse('req')).status_code, 200)
-        html1 = '<p class="item-1">'+str(self.req1.id)+'. request from ' + \
-                str(self.req1.timestamp)
-        html2 = '<p class="item-2">'+str(self.req2.id)+'. request from ' + \
-                str(self.req2.timestamp)
-        self.assertIn(response, html1)
-        self.assertIn(response, html2)
+        html1 = '<p class="item-1">'+str(self.req1.id) + \
+                '. request from ' + \
+                DateFormat(self.req1.timestamp).format('H:i:s.u d-m-Y')
+        html2 = '<p class="item-2">'+str(self.req2.id) + \
+                '. request from ' + \
+                DateFormat(self.req2.timestamp).format('H:i:s.u d-m-Y')
+        self.assertContains(response, html1)
+        self.assertContains(response, html2)
 
 
 class TestCustomerRequest(LiveServerTestCase):
@@ -352,8 +353,8 @@ class TestCustomerRequest(LiveServerTestCase):
             priority=1,
         )
         self.req2 = Requests.objects.create(
-            row='dlfkgndlfkgndflkgndflkgndlfgndlfgndflgkndflg fdg dflgd',
-            priority=0,
+            row='dlfkgndlfkgndflk45453523421ndflgkndflg fdg dflgd',
+            priority=1,
         )
 
     def tearDown(self):
@@ -375,4 +376,7 @@ class TestCustomerRequest(LiveServerTestCase):
         first = self.browser.find_element_by_css_selector(css_selector1)
         second = self.browser.find_element_by_css_selector(css_selector2)
         self.assertTrue(first.is_displayed())
-        self.assertIn(str(first), str(self.req1.timestamp))
+        self.assertIn(DateFormat(self.req1.timestamp).format('H:i:s.u d-m-Y'),
+                      first.text)
+        self.assertIn(DateFormat(self.req2.timestamp).format('H:i:s.u d-m-Y'),
+                      second.text)

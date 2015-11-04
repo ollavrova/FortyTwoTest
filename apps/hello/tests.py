@@ -141,6 +141,7 @@ class TestMiddleware(TestCase):
 class TestEditForm(TestCase):
     def setUp(self):
         self.auth = {"username": "admin", "password": "admin"}
+        self.person = Person.objects.first()
 
     def test_auth(self):
         """
@@ -164,7 +165,7 @@ class TestEditForm(TestCase):
         upload_file = open(os.path.join(STATICFILES_DIRS[0],
                                         'img', "test.jpg"), "rb")
         data = dict(
-            first_name="Olga",
+            first_name="Olga1",
             last_name="Test",
             birthday="2000-01-01",
             bio="biography",
@@ -192,6 +193,14 @@ class TestEditForm(TestCase):
         self.assertContains(response2, data['email'])
         self.assertContains(response2, data['skype'])
         self.assertContains(response2, data['other'])
+        # check if it saved in db
+        person = Person.objects.first()
+        self.assertEqual(person.first_name, data['first_name'])
+        self.assertEqual(person.last_name, data['last_name'])
+        self.assertEqual(person.bio, data['bio'])
+        self.assertEqual(person.email, data['email'])
+        self.assertEqual(person.skype, data['skype'])
+        self.assertEqual(person.other, data['other'])
 
     def test_show_errors(self):
         """

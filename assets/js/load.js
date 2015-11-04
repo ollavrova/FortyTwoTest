@@ -34,12 +34,9 @@ function afterRequest(responseText, statusText, xhr, $form) {
     $("#send-form").prop('disabled', false);
     var errors = $('div#errors').text().trim();
     console.log(errors);
-    if (!errors) {
+    if (errors == false) {
         console.log('no errors!');
         $("#result").prepend('<span>Changes have been saved.</span>');
-    };
-    if ($form.errors(jqxhr, textStatus, error)) {
-        console.log('form error! ' + error);
     };
 };
 /*]]>*/

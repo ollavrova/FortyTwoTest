@@ -1,6 +1,3 @@
-<form enctype="multipart/form-data"
-              id="send-form" action="{% url 'edit' %}" method="post">
-
 {% csrf_token %}
 {% load thumbnail %}
 
@@ -72,4 +69,3 @@
 <div class="right-side">
     <a href="{% url 'home' %}">Cancel</a>
 </div>
-  </form>

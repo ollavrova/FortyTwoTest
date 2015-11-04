@@ -1,11 +1,11 @@
 42-test project
 ===========================
-
-A Django 1.6+ project
-
+A Django 1.6.7 project
 
 
 ### Description
+
+
 * apps in apps/ folder
 * per-app templates folders
 * per-app static folders
@@ -15,9 +15,12 @@ A Django 1.6+ project
 * common static lives in assets/
 * management commands proxied to single word make commands, e.g make test
 
-Requirements packages:
-Django==1.6.7
-42cc-pystyle
-south
-easy_thumbnails
-selenium
+
+###Requirements packages:
+
+* Django==1.6.7
+* 42cc-pystyle
+* south
+* easy_thumbnails
+* selenium
+

@@ -9,7 +9,8 @@
 {% block title %} Requests list{% endblock %}
 {% block title-block %}{% endblock %}
 
-{% block content %} {% csrf_token %}
+{% block content %}
+    {% csrf_token %}
     <h3 class="main-title"> Requests list:</h3>
     <input id="get_time" value="{{ old_time }}" type="hidden"/>
     <input id="result" value='0' type="hidden"/>
@@ -20,7 +21,6 @@
         <p class="item-{{ forloop.counter }}">{{ row.id }}. request from {{ row.timestamp|date:'H:i:s.u d-m-Y' }}:
         {{ row.request_method }}, {{ row.request_path }}, priority ={{ row.priority }}
         </p>
-
     {% endfor %}
 </div>
 {% endblock %}

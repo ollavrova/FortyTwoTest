@@ -7,7 +7,7 @@ body {
     float: none;
     display: table-cell;
     padding-right: 50px;
-    width: 220px;
+    min-width: 320px;
     position: relative;
     left: 20px;
     word-wrap: break-word;
@@ -16,7 +16,7 @@ body {
 .right-side {
     float: none;
     display: table-cell;
-    width: 200px;
+    width: 300px;
     position: relative;
     left: 50px;
 }
@@ -220,7 +220,7 @@ strong.alert-success {
     color: #008000;
     background-color: inherit;
 }
-strong.alert-error, #errors {
+strong.alert-error, #errors, .errorlist {
     color: red;
     background-color: inherit;
 }

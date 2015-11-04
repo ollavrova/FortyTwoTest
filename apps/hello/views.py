@@ -9,8 +9,8 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.response import TemplateResponse
-from django.views.generic import TemplateView
 from django.utils.dateformat import DateFormat
+from django.views.generic import TemplateView
 
 
 logger = logging.getLogger(__name__)

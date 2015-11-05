@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+import datetime
 from apps.hello.models import Person, Requests
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.utils.dateformat import DateFormat
 
 
 class TestShowPage(TestCase):
@@ -133,3 +135,20 @@ class TestMiddleware(TestCase):
                          Requests.objects.latest('timestamp').request_path)
         count2 = Requests.objects.all().count()
         self.assertEqual(count2, count1+2)
+
+
+class TestRequestCount(TestCase):
+
+    def test_post(self):
+        response = self.client.get(reverse('req'))
+
+        self.assertEqual(response.status_code, 200)
+        self.client.get(reverse('home'))
+        data = {
+            'csrfmiddlewaretoken': response.context[0]['csrf_token'],
+            'old_time': response.context[0]['old_time']
+        }
+        response2 = self.client.post(reverse('req'), data, content_type='application/json')
+        print 'response2 =', response2
+        import ipdb; ipdb.set_trace()
+        self.assertContains(response2, '<title>(1)')

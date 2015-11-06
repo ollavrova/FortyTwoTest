@@ -116,9 +116,6 @@ class TestMiddleware(TestCase):
                 self.assertContains(response, r.request_path)
             else:
                 self.assertNotContains(response, r.request_path)
-        response = self.client.get(reverse('req'), dict(request_old_count=15),
-                                   HTTP_X_REQUESTED_WITH="XMLHttpRequest")
-        self.assertEqual(response.status_code, 200)
 
     def test_middleware_writing(self):
         """
@@ -141,14 +138,14 @@ class TestRequestCount(TestCase):
 
     def test_post(self):
         response = self.client.get(reverse('req'))
-
+        print 'response = ', response
         self.assertEqual(response.status_code, 200)
         self.client.get(reverse('home'))
         data = {
             'csrfmiddlewaretoken': response.context[0]['csrf_token'],
             'old_time': response.context[0]['old_time']
         }
-        response2 = self.client.post(reverse('req'), data, content_type='application/json')
+        response2 = self.client.post(reverse('req'), data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
         print 'response2 =', response2
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
         self.assertContains(response2, '<title>(1)')

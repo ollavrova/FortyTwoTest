@@ -144,6 +144,9 @@ class TestRequestCount(TestCase):
             'csrfmiddlewaretoken': response.context[0]['csrf_token'],
             'old_time': response.context[0]['old_time']
         }
-        response2 = self.client.post(reverse('req'), data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response2 = self.client.post(
+            reverse('req'),
+            data,
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest")
         self.assertContains(response2, "result")
         self.assertContains(response2, "old_time")

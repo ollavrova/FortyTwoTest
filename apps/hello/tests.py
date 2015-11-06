@@ -308,7 +308,6 @@ class TestSignalProcessor(TestCase):
                                                action='delete'))
 
 
-
 class TestCustomerRequest1(TestCase):
 
     def setUp(self):

@@ -3,3 +3,4 @@ Django==1.6.7
 south
 easy_thumbnails
 selenium
+phantomjs

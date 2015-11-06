@@ -167,7 +167,7 @@ class TestEditForm(TestCase):
         upload_file = open(os.path.join(STATICFILES_DIRS[0],
                                         'img', "test.jpg"), "rb")
         data = dict(
-            first_name="Olga",
+            first_name="Olga1",
             last_name="Test",
             birthday="2000-01-01",
             bio="biography",
@@ -195,6 +195,14 @@ class TestEditForm(TestCase):
         self.assertContains(response2, data['email'])
         self.assertContains(response2, data['skype'])
         self.assertContains(response2, data['other'])
+        # check if it saved in db
+        person = Person.objects.first()
+        self.assertEqual(person.first_name, data['first_name'])
+        self.assertEqual(person.last_name, data['last_name'])
+        self.assertEqual(person.bio, data['bio'])
+        self.assertEqual(person.email, data['email'])
+        self.assertEqual(person.skype, data['skype'])
+        self.assertEqual(person.other, data['other'])
 
     def test_show_errors(self):
         """
@@ -273,22 +281,16 @@ class TestSignalProcessor(TestCase):
         """
         testing signals after any db action
         """
-        response = self.client.get(reverse('home'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue("Olga" in response.content)
+        # check if exist create records
         self.assertTrue((Journal.objects.filter(
             id_item=self.person.pk)[0]).action == 'create')
+        self.assertTrue(Journal.objects.filter(id_item=self.person.pk,
+                                               model_name=Person.__name__,
+                                               action='create'))
         self.client.post(reverse('login'), self.auth)
         data = dict(
             pk=1,
-            first_name="Test",
-            last_name="User",
-            birthday="1994-04-11",
-            bio="biography test user",
-            email="google321@google.com",
-            jabber="xxx321@jabber.org",
-            skype="qwerty 321",
-            other="qwerty drtreter rtyht h"
+            first_name="TestName",
         )
         response = self.client.post(reverse('edit'), data=data,
                                     HTTP_X_REQUESTED_WITH="XMLHttpRequest")
@@ -302,3 +304,7 @@ class TestSignalProcessor(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(Journal.objects.filter(model_name=Requests.__name__,
                                                action='create'))
+        # check deleting Persons entry
+        self.person.delete()
+        self.assertTrue(Journal.objects.filter(model_name=Person.__name__,
+                                               action='delete'))

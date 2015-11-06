@@ -25,21 +25,6 @@ class Person(models.Model):
     photo = ThumbnailerImageField(upload_to='uploads', blank=True, null=True,
                                   resize_source=dict(size=size, sharpen=True))
 
-    def save(self, *args, **kw):
-        if self.pk is not None:
-            orig = Person.objects.get(pk=self.pk)
-            if (orig.first_name != self.first_name) or \
-                    (orig.last_name != self.last_name) or \
-                    (orig.bio != self.bio) or \
-                    (orig.birthday != self.birthday) or \
-                    (orig.email != self.email) or \
-                    (orig.jabber != self.jabber) or \
-                    (orig.skype != self.skype) or \
-                    (orig.other != self.other) or \
-                    (orig.photo != self.photo):
-                my_callback_save(Person, orig, post_save, update_fields=True)
-        super(Person, self).save(*args, **kw)
-
 
 class Requests(models.Model):
     row = models.CharField(max_length=1000)
@@ -62,30 +47,20 @@ class Journal(models.Model):
         return str(self.id)
 
 
-@receiver(post_save, sender=Requests)   # NOQA
-@receiver(post_save, sender=Person)
-def my_callback_save(sender, instance, signal, *args, **kwargs):
-    if 'created' in kwargs:
-        if kwargs['created']:
-            entry = Journal(model_name=sender.__name__,
-                            action=ACTION[2][1],
+@receiver(post_save)   # NOQA
+def my_callback_save(sender, instance=None, created=False, **kwargs):
+    if sender.__name__ not in ['Journal', 'Session']:
+        action = ACTION[2][1] if created else ACTION[1][1]
+        entry = Journal.objects.create(model_name=sender.__name__,  # NOQA
+                            action=action,
                             timestamp=datetime.datetime.now(),
                             id_item=instance.id)
-            entry.save()
-    else:
-        if kwargs['update_fields']:
-            entry = Journal(model_name=sender.__name__,
-                            action=ACTION[1][1],
-                            timestamp=datetime.datetime.now(),
-                            id_item=instance.id)
-            entry.save()
 
 
-@receiver(post_delete, sender=Person)
-@receiver(post_delete, sender=Requests)
+@receiver(post_delete)   # NOQA
 def my_callback_delete(sender, instance, signal, *args, **kwargs):
-    entry = Journal(model_name=sender.__name__,
-                    action=ACTION[0][1],
-                    timestamp=datetime.datetime.now(),
-                    id_item=instance.id)
-    entry.save()
+    if sender.__name__ not in ['Journal', 'Session']:
+        entry = Journal.objects.create(model_name=sender.__name__,  # NOQA
+                                       action=ACTION[0][1],
+                                       timestamp=datetime.datetime.now(),
+                                       id_item=instance.id)

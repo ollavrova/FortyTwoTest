@@ -284,35 +284,29 @@ class TestSignalProcessor(TestCase):
         """
         testing signals after any db action
         """
-        response = self.client.get(reverse('home'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue("Olga" in response.content)
+        # check if exist create records
         self.assertTrue((Journal.objects.filter(
             id_item=self.person.pk)[0]).action == 'create')
+        self.assertTrue(Journal.objects.filter(id_item=self.person.pk,
+                                               model_name=Person.__name__,
+                                               action='create'))
         self.client.post(reverse('login'), self.auth)
-        data = dict(
-            pk=1,
-            first_name="Test",
-            last_name="User",
-            birthday="1994-04-11",
-            bio="biography test user",
-            email="google321@google.com",
-            jabber="xxx321@jabber.org",
-            skype="qwerty 321",
-            other="qwerty drtreter rtyht h"
-        )
-        response = self.client.post(reverse('edit'), data=data,
-                                    HTTP_X_REQUESTED_WITH="XMLHttpRequest")
-        self.assertEqual(response.status_code, 200)
         # check editing signal
+        self.person.first_name = 'TestName'
+        self.person.save()
         self.assertTrue(Journal.objects.filter(id_item=1,
                                                model_name=Person.__name__,
                                                action='edit'))
-        # check creating Requests entry
+        # check creating signal
         response = self.client.get(reverse('req'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(Journal.objects.filter(model_name=Requests.__name__,
                                                action='create'))
+        # check deleting signal
+        self.person.delete()
+        self.assertTrue(Journal.objects.filter(model_name=Person.__name__,
+                                               action='delete'))
+
 
 
 class TestCustomerRequest1(TestCase):

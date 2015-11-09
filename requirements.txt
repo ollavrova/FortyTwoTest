@@ -1,4 +1,4 @@
 Django==1.6.7
-42cc-pystyle
 south
 easy_thumbnails
+selenium

@@ -19,8 +19,9 @@ A Django 1.6.7 project
 ###Requirements packages:
 
 * Django==1.6.7
-* 42cc-pystyle
-* south
-* easy_thumbnails
-* selenium
+* South==1.0.2
+* easy_thumbnails==2.2
+* selenium==2.48.0
+* phantomjs 1.9.8
+* flake8==2.4.1
 

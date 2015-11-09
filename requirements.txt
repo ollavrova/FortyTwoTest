@@ -1,5 +1,5 @@
 Django==1.6.7
-south
-easy_thumbnails
-selenium
-
+South==1.0.2
+easy_thumbnails==2.2
+selenium==2.48.0
+flake8==2.4.1

@@ -16,3 +16,4 @@ static
 *.dat
 .venv
 log
+log/log.*

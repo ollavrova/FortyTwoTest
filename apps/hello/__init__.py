@@ -1,1 +1,1 @@
-import signals
+from signals import *

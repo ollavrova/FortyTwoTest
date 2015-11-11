@@ -10,19 +10,16 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.response import TemplateResponse
 from django.utils.dateformat import DateFormat
-from django.views.generic import TemplateView
 
 
 logger = logging.getLogger(__name__)
 
 
-class HomeView(TemplateView):
-    template_name = 'hello/index.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(HomeView, self).get_context_data(**kwargs)
-        context['person'] = Person.objects.first()
-        return context
+def home(request):
+    person = Person.objects.first()
+    return render_to_response('hello/index.html',
+                              {'person': person},
+                              RequestContext(request))
 
 
 def req(request):

@@ -9,5 +9,4 @@ class MyMiddleware(object):
                            request_path=request.path,
                            request_method=request.method)
             row.save()
-            request.new_count = Requests.objects.all().count()
         return

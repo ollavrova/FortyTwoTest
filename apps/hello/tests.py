@@ -44,14 +44,14 @@ class TestShowPage(TestCase):
 
     def test_render_context(self):
         """
-        test render context
+        test for context - if context contains a person
         """
         response = self.client.get(reverse('home'))
         self.assertEqual(response.context['person'], self.person)
 
     def test_render_cyrilic(self):
         """
-        test render cyrilic text
+        test render cyrilic text - check on
         """
         self.person.first_name = 'Ольга'
         self.person.last_name = 'Лаврова'
@@ -92,7 +92,8 @@ class TestEmptyBase(TestCase):
 
     def test_empty_page(self):
         """
-        testing what if database is empty
+        testing what if database is empty - then we have to
+        see a special info about
         """
         Person.objects.all().delete()
         response = self.client.get(reverse('home'))
@@ -112,7 +113,8 @@ class TestMiddleware(TestCase):
 
     def test_middleware_show_list(self):
         """
-        testing middleware, and page that show only 10 first requests
+        testing our custom middleware, and page that
+        show only 10 first requests
         """
         response = self.client.get(reverse('req'))
         self.assertEqual(response.status_code, 200)
@@ -125,7 +127,7 @@ class TestMiddleware(TestCase):
 
     def test_middleware_writing(self):
         """
-        test middleware writing in db
+        test if middleware writing in db
         """
         count1 = Requests.objects.all().count()
         response = self.client.get(reverse('req'))
@@ -147,7 +149,7 @@ class TestEditForm(TestCase):
 
     def test_auth(self):
         """
-        testing auth to edit page
+        testing auth to edit page - if we have a page with login required
         """
         self.assertEqual(self.client.get(reverse('logout')).status_code, 302)
         self.assertEqual(self.client.get(reverse('home')).status_code, 200)
@@ -160,7 +162,7 @@ class TestEditForm(TestCase):
 
     def test_editform(self):
         """
-        test edit form
+        test edit form - we change info and save it.
         """
         self.client.post(reverse('login'), self.auth)
         self.assertEqual(self.client.get(reverse('edit')).status_code, 200)
@@ -206,7 +208,7 @@ class TestEditForm(TestCase):
 
     def test_show_errors(self):
         """
-        test for checking show errors
+        test for checking show errors if was input a wrong data
         """
         self.client.post(reverse('login'), self.auth)
         data = dict(
@@ -279,7 +281,8 @@ class TestSignalProcessor(TestCase):
 
     def test_signals(self):
         """
-        testing signals after any db action
+        testing signals after any db action - check if there is
+        a record with action
         """
         # check if exist create records
         self.assertTrue((Journal.objects.filter(
@@ -320,7 +323,7 @@ class TestCustomerRequest1(TestCase):
 
     def test_priority(self):
         """
-        check if show request with priority
+        check if show request with priority ordering on special page
         """
         # set max priority to record
         max_priority = Requests.objects.order_by('-priority')[0].priority
@@ -361,7 +364,7 @@ class TestCustomerRequest(LiveServerTestCase):
 
     def test_priority(self):
         """
-        check if show request with priority
+        check if show request with priority ordering
         """
         self.browser.get(self.live_server_url + '/requests')
         title = self.browser.find_element_by_class_name('main-title')
@@ -385,7 +388,7 @@ class TestRequestCount(TestCase):
 
     def test_post(self):
         """
-        test for post request for counting
+        test for post request for counting requests function
         """
         response = self.client.get(reverse('req'))
         self.client.get(reverse('home'))

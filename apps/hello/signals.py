@@ -1,8 +1,8 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from apps.hello.models import Journal, Person, Requests
+from apps.hello.models import Journal
 
-models_list = [Person, Requests]
+models_list = ['Journal', 'Session']
 
 
 @receiver(post_save)

@@ -5,7 +5,7 @@ from apps.hello.models import Journal, ACTION
 
 
 @receiver(post_save)
-def my_callback_save(sender, instance=None, created=False, **kwargs):
+def callback_save(sender, instance=None, created=False, **kwargs):
     if sender.__name__ not in ['Journal', 'Session']:
         action = ACTION[2][1] if created else ACTION[1][1]
         entry = Journal(model_name=sender.__name__,
@@ -15,7 +15,7 @@ def my_callback_save(sender, instance=None, created=False, **kwargs):
 
 
 @receiver(post_delete)
-def my_callback_delete(sender, instance, signal, *args, **kwargs):
+def callback_delete(sender, instance, signal, *args, **kwargs):
     if sender.__name__ not in ['Journal', 'Session']:
         entry = Journal(model_name=sender.__name__,
                         action=ACTION[0][1],

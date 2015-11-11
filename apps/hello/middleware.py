@@ -2,7 +2,7 @@ from apps.hello.models import Requests
 import datetime
 
 
-class MyMiddleware(object):
+class CustomMiddleware(object):
     def process_request(self, request):
         if request.method == 'GET':
             row = Requests(row=str(request), timestamp=datetime.datetime.now(),

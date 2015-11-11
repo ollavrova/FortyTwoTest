@@ -31,7 +31,10 @@
                     <p>Photo:</p>
                     <div class="image">
                         {% if person.photo %}
-                       <img src="{% thumbnail person.photo 300x400 %}"/>
+                       {% thumbnail person.photo 300x400 crop upscale as thumb %}
+                           <img src="{{ thumb.url }}"
+                                         width="{{ thumb.width }}"
+                                         height="{{ thumb.height }}" />
                         {% endif %}
                     </div>
                     </p>

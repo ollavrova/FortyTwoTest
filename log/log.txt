@@ -1,0 +1,88 @@
+[11/Nov/2015 17:30:27] INFO [apps.hello.views:60] User admin tried to edit data.
+[11/Nov/2015 17:30:27] INFO [apps.hello.views:65] The form is saved.
+[11/Nov/2015 17:30:30] INFO [apps.hello.views:60] User admin tried to edit data.
+[11/Nov/2015 17:30:30] INFO [apps.hello.views:65] The form is saved.
+[11/Nov/2015 17:31:29] INFO [apps.hello.views:60] User admin tried to edit data.
+[11/Nov/2015 17:31:29] ERROR [apps.hello.views:69] type object 'datetime.time' has no attribute 'sleep'
+Traceback (most recent call last):
+  File "/home/ola/projects/FortyTwoTest/apps/hello/views.py", line 64, in edit
+    datetime.time.sleep(5)
+AttributeError: type object 'datetime.time' has no attribute 'sleep'
+[11/Nov/2015 17:31:34] INFO [apps.hello.views:60] User admin tried to edit data.
+[11/Nov/2015 17:31:34] ERROR [apps.hello.views:69] type object 'datetime.time' has no attribute 'sleep'
+Traceback (most recent call last):
+  File "/home/ola/projects/FortyTwoTest/apps/hello/views.py", line 64, in edit
+    datetime.time.sleep(5)
+AttributeError: type object 'datetime.time' has no attribute 'sleep'
+[11/Nov/2015 17:33:19] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 17:33:24] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 17:33:45] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 17:33:50] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 17:58:08] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 17:58:15] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 17:59:51] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 17:59:56] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:00:10] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:00:16] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:00:26] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:00:32] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:00:46] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:00:51] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:01:06] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:01:12] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:06:13] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:06:20] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:06:44] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:06:50] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:10:43] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:10:48] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:11:01] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:11:07] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:12:47] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:12:52] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:14:21] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:14:27] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:14:36] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:14:41] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:15:00] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:15:05] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:16:16] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:16:22] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:16:34] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:16:40] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:19:42] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:19:48] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:20:10] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:20:16] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:20:23] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:20:29] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:20:53] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:20:59] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:21:04] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:21:10] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:27:09] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:27:14] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:31:25] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:31:30] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:31:38] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:31:43] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:31:49] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:31:55] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:36:48] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:36:53] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:38:21] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:38:27] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:38:43] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:38:49] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:39:24] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:39:29] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:39:46] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:39:51] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:40:01] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:40:06] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:41:06] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:41:12] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:41:19] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:41:25] INFO [apps.hello.views:67] The form is saved.
+[11/Nov/2015 18:41:42] INFO [apps.hello.views:61] User admin tried to edit data.
+[11/Nov/2015 18:41:47] INFO [apps.hello.views:67] The form is saved.

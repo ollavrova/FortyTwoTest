@@ -62,7 +62,6 @@ def edit(request):
         form = PersonEditForm(request.POST, request.FILES, instance=person)
         if form.is_valid():
             try:
-                time.sleep(5)
                 form.save()
                 logger.info('The form is saved.')
             except Exception as e:

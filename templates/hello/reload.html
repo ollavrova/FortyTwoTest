@@ -18,9 +18,11 @@
     <div class="image-edit">
         {% if person.photo %}
             {% thumbnail form.instance.photo 229x314 crop upscale as thumb %}
-                           <img class="image-edit" src="{{ thumb.url }}"
+                           <img class="image-edit" src="{{ thumb.url }}" id="image_edit" name="image_edit"
                                          width="{{ thumb.width }}"
                                          height="{{ thumb.height }}" />
+        {% else %}
+            <img id="image_edit" class="image-edit" style="display: none" />
         {% endif %}
     </div>
 </div>

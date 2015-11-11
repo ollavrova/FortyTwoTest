@@ -19,6 +19,8 @@ $(document).ready(function (e) {
     });
 });
 
+
+
 function beforeRequest(formData, jqForm, options) {
     var queryString = $.param(formData);
     var file = $('#id_photo').get(0).files[0];
@@ -38,5 +40,24 @@ function afterRequest(responseText, statusText, xhr, $form) {
         console.log('no errors!');
         $("#result").prepend('<span>Changes have been saved.</span>');
     };
+};
+
+window.onload = function(){
+  function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#image_edit').attr('src', e.target.result);
+                $('#image_edit').attr('style', 'display: block');
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#id_photo").change(function(){
+        readURL(this);
+    });
 };
 /*]]>*/

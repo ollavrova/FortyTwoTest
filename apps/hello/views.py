@@ -37,7 +37,7 @@ def req(request):
                 request_method='POST',
                 request_path='/requests/').count()
             if delta:
-                logger.info('check requests:'+str({'new': delta}))
+                logger.info('check requests:' + str({'new': delta}))
         except Exception as e:
             delta = e.message
             logger.error(delta)

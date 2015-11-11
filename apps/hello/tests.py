@@ -106,9 +106,9 @@ class TestEmptyBase(TestCase):
 class TestMiddleware(TestCase):
     def setUp(self):
         for r in range(1, 15, 1):
-            Requests.objects.create(row='Example'+str(r),
-                                    request_path='/example_requests/'+str(r),
-                                    request_method='GET'+str(r))
+            Requests.objects.create(row='Example' + str(r),
+                                    request_path='/example_requests/' + str(r),
+                                    request_method='GET' + str(r))
 
     def test_middleware_show_list(self):
         """
@@ -137,7 +137,7 @@ class TestMiddleware(TestCase):
         self.assertEqual('/',
                          Requests.objects.latest('timestamp').request_path)
         count2 = Requests.objects.all().count()
-        self.assertEqual(count2, count1+2)
+        self.assertEqual(count2, count1 + 2)
 
 
 class TestEditForm(TestCase):
@@ -324,16 +324,16 @@ class TestCustomerRequest1(TestCase):
         """
         # set max priority to record
         max_priority = Requests.objects.order_by('-priority')[0].priority
-        self.req1.priority = max_priority+1
+        self.req1.priority = max_priority + 1
         self.req1.save()
         response = self.client.get(reverse('req'))
         # check if record is first in list in context
         self.assertEqual(response.context['object_list'][0], self.req1)
         self.assertEqual(self.client.get(reverse('req')).status_code, 200)
-        html1 = '<p class="item-1">'+str(self.req1.id) + \
+        html1 = '<p class="item-1">' + str(self.req1.id) + \
                 '. request from ' + \
                 DateFormat(self.req1.timestamp).format('H:i:s.u d-m-Y')
-        html2 = '<p class="item-2">'+str(self.req2.id) + \
+        html2 = '<p class="item-2">' + str(self.req2.id) + \
                 '. request from ' + \
                 DateFormat(self.req2.timestamp).format('H:i:s.u d-m-Y')
         self.assertContains(response, html1)

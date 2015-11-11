@@ -15,7 +15,7 @@ class PersonEditForm(forms.ModelForm):
         model = Person
         widgets = {
             'birthday': CustomDatePicker(
-                params="dateFormat: 'yy-mm-dd', changeYear: true, defaultDate: '-37y', yearRange: 'c-15:c+15'",  # NOQA
+                params="dateFormat: 'yy-mm-dd', changeYear: true, defaultDate: '-37y', yearRange: 'c-15:c+15'",
                 attrs={'type': 'date'},
             )
         }

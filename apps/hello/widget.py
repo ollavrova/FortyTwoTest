@@ -18,7 +18,7 @@ class CustomDatePicker(DateInput):
 
     class Media:
         css = {
-            'all': (staticfiles_storage.url('jquery-ui-1.11.2.custom/jquery-ui.min.css'),)  # NOQA
+            'all': (staticfiles_storage.url('jquery-ui-1.11.2.custom/jquery-ui.min.css'),)
         }
         js = (
             STATIC_URL + 'jquery-ui-1.11.2.custom/external/jquery/jquery.js',

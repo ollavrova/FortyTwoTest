@@ -11,8 +11,7 @@ def my_callback_save(sender, instance=None, created=False, **kwargs):
         entry = Journal(model_name=sender.__name__,
                         action=action,
                         timestamp=datetime.datetime.now(),
-                        id_item=instance.id)
-        entry.save()
+                        id_item=instance.id).save()
 
 
 @receiver(post_delete)
@@ -21,5 +20,4 @@ def my_callback_delete(sender, instance, signal, *args, **kwargs):
         entry = Journal(model_name=sender.__name__,
                         action=ACTION[0][1],
                         timestamp=datetime.datetime.now(),
-                        id_item=instance.id)
-        entry.save()
+                        id_item=instance.id).save()

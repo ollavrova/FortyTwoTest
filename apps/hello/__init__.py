@@ -1,1 +1,1 @@
-import signals  # noqa
+import signals

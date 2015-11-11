@@ -55,7 +55,7 @@ def req(request):
 
 @login_required
 def edit(request):
-    person = Person.objects.first()
+    person = Person.objects.get(pk=1)
     if request.method == 'POST' and request.is_ajax():
         logger.info('User %s tried to edit data.' % request.user)
         form = PersonEditForm(request.POST, request.FILES, instance=person)

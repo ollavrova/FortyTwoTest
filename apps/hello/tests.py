@@ -6,6 +6,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.template import Context, Template
 from fortytwo_test_task.settings import STATICFILES_DIRS
 from apps.hello.models import Person, Requests, Journal
+import json
 from django.core.urlresolvers import reverse
 from StringIO import StringIO
 from django.test import TestCase, LiveServerTestCase
@@ -44,14 +45,14 @@ class TestShowPage(TestCase):
 
     def test_render_context(self):
         """
-        test render context
+        test for context - if context contains a person
         """
         response = self.client.get(reverse('home'))
         self.assertEqual(response.context['person'], self.person)
 
     def test_render_cyrilic(self):
         """
-        test render cyrilic text
+        test render cyrilic text - check on
         """
         self.person.first_name = 'Ольга'
         self.person.last_name = 'Лаврова'
@@ -92,7 +93,8 @@ class TestEmptyBase(TestCase):
 
     def test_empty_page(self):
         """
-        testing what if database is empty
+        testing what if database is empty - then we have to
+        see a special info about
         """
         Person.objects.all().delete()
         response = self.client.get(reverse('home'))
@@ -106,13 +108,14 @@ class TestEmptyBase(TestCase):
 class TestMiddleware(TestCase):
     def setUp(self):
         for r in range(1, 15, 1):
-            Requests.objects.create(row='Example'+str(r),
-                                    request_path='/example_requests/'+str(r),
-                                    request_method='GET'+str(r))
+            Requests.objects.create(row='Example' + str(r),
+                                    request_path='/example_requests/' + str(r),
+                                    request_method='GET' + str(r))
 
     def test_middleware_show_list(self):
         """
-        testing middleware, and page that show only 10 first requests
+        testing our custom middleware, and page that
+        show only 10 first requests
         """
         response = self.client.get(reverse('req'))
         self.assertEqual(response.status_code, 200)
@@ -125,7 +128,7 @@ class TestMiddleware(TestCase):
 
     def test_middleware_writing(self):
         """
-        test middleware writing in db
+        test if middleware writing in db
         """
         count1 = Requests.objects.all().count()
         response = self.client.get(reverse('req'))
@@ -137,7 +140,7 @@ class TestMiddleware(TestCase):
         self.assertEqual('/',
                          Requests.objects.latest('timestamp').request_path)
         count2 = Requests.objects.all().count()
-        self.assertEqual(count2, count1+2)
+        self.assertEqual(count2, count1 + 2)
 
 
 class TestEditForm(TestCase):
@@ -147,7 +150,7 @@ class TestEditForm(TestCase):
 
     def test_auth(self):
         """
-        testing auth to edit page
+        testing auth to edit page - if we have a page with login required
         """
         self.assertEqual(self.client.get(reverse('logout')).status_code, 302)
         self.assertEqual(self.client.get(reverse('home')).status_code, 200)
@@ -160,7 +163,7 @@ class TestEditForm(TestCase):
 
     def test_editform(self):
         """
-        test edit form
+        test edit form - we change info and save it.
         """
         self.client.post(reverse('login'), self.auth)
         self.assertEqual(self.client.get(reverse('edit')).status_code, 200)
@@ -206,7 +209,7 @@ class TestEditForm(TestCase):
 
     def test_show_errors(self):
         """
-        test for checking show errors
+        test for checking show errors if was input a wrong data
         """
         self.client.post(reverse('login'), self.auth)
         data = dict(
@@ -279,7 +282,8 @@ class TestSignalProcessor(TestCase):
 
     def test_signals(self):
         """
-        testing signals after any db action
+        testing signals after any db action - check if there is
+        a record with action
         """
         # check if exist create records
         self.assertTrue((Journal.objects.filter(
@@ -320,20 +324,20 @@ class TestCustomerRequest1(TestCase):
 
     def test_priority(self):
         """
-        check if show request with priority
+        check if show request with priority ordering on special page
         """
         # set max priority to record
         max_priority = Requests.objects.order_by('-priority')[0].priority
-        self.req1.priority = max_priority+1
+        self.req1.priority = max_priority + 1
         self.req1.save()
         response = self.client.get(reverse('req'))
         # check if record is first in list in context
         self.assertEqual(response.context['object_list'][0], self.req1)
         self.assertEqual(self.client.get(reverse('req')).status_code, 200)
-        html1 = '<p class="item-1">'+str(self.req1.id) + \
+        html1 = '<p class="item-1">' + str(self.req1.id) + \
                 '. request from ' + \
                 DateFormat(self.req1.timestamp).format('H:i:s.u d-m-Y')
-        html2 = '<p class="item-2">'+str(self.req2.id) + \
+        html2 = '<p class="item-2">' + str(self.req2.id) + \
                 '. request from ' + \
                 DateFormat(self.req2.timestamp).format('H:i:s.u d-m-Y')
         self.assertContains(response, html1)
@@ -361,7 +365,7 @@ class TestCustomerRequest(LiveServerTestCase):
 
     def test_priority(self):
         """
-        check if show request with priority
+        check if show request with priority ordering
         """
         self.browser.get(self.live_server_url + '/requests')
         title = self.browser.find_element_by_class_name('main-title')
@@ -375,9 +379,11 @@ class TestCustomerRequest(LiveServerTestCase):
         first = self.browser.find_element_by_css_selector(css_selector1)
         second = self.browser.find_element_by_css_selector(css_selector2)
         self.assertTrue(first.is_displayed())
-        self.assertIn(DateFormat(self.req1.timestamp).format('H:i:s.u d-m-Y'),
+        self.assertIn(DateFormat(self.req1.timestamp).
+                      format('H:i:s.u d-m-Y'),
                       first.text)
-        self.assertIn(DateFormat(self.req2.timestamp).format('H:i:s.u d-m-Y'),
+        self.assertIn(DateFormat(self.req2.timestamp).
+                      format('H:i:s.u d-m-Y'),
                       second.text)
 
 
@@ -385,17 +391,18 @@ class TestRequestCount(TestCase):
 
     def test_post(self):
         """
-        test for post request for counting
+        test for post request for counting requests function -
+        it send a time and got result number back
         """
         response = self.client.get(reverse('req'))
         self.client.get(reverse('home'))
-        data = {
-            'csrfmiddlewaretoken': response.context[0]['csrf_token'],
-            'old_time': response.context[0]['old_time']
-        }
+        data = dict()
+        data['old_time'] = response.context[0]['old_time']
+        params = json.dumps(data)
         response2 = self.client.post(
             reverse('req'),
-            data,
+            content_type='application/json',
+            data=params,
             HTTP_X_REQUESTED_WITH="XMLHttpRequest")
-        self.assertContains(response2, "result")
+        self.assertContains(response2, '"result": 1')
         self.assertContains(response2, "old_time")

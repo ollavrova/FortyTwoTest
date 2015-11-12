@@ -1,21 +1,8 @@
-from apps.hello.views import HomeView
 from django.conf.urls import patterns, url
-from django.contrib import admin
-from django.conf.urls.static import static
-from fortytwo_test_task import settings
-
-admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^$', 'apps.hello.views.home', name='home'),
     url(r'^requests/', 'apps.hello.views.req', name='req'),
     url(r'^edit/', 'apps.hello.views.edit', name='edit'),
-    url(r'^accounts/login/$',
-        'django.contrib.auth.views.login',
-        {'template_name': 'registration/login.html'},
-        name='login'),
-    url(r'^logout/$', 'django.contrib.auth.views.logout',
-        {'next_page': '/'}, name='logout'),
-
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+)

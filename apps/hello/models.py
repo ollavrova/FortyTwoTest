@@ -1,14 +1,6 @@
 from django.db import models
 from easy_thumbnails.fields import ThumbnailerImageField
 
-size = (200, 200)
-
-ACTION = (
-    ('0', 'delete'),
-    ('1', 'edit'),
-    ('2', 'create'),
-)
-
 
 class Person(models.Model):
     first_name = models.CharField(max_length=100, verbose_name='First Name')
@@ -20,7 +12,10 @@ class Person(models.Model):
     skype = models.CharField(max_length=100, verbose_name='Skype')
     other = models.TextField(verbose_name='Other contacts')
     photo = ThumbnailerImageField(upload_to='uploads', blank=True, null=True,
-                                  resize_source=dict(size=size, sharpen=True))
+                                  resize_source=dict(size=(200, 0),
+                                                     crop='scale',
+                                                     autocrop=True,
+                                                     upscale=True))
 
 
 class Requests(models.Model):
@@ -36,8 +31,11 @@ class Requests(models.Model):
 
 class Journal(models.Model):
     model_name = models.CharField(max_length=25)
-    action = models.CharField(choices=ACTION, max_length=1)
-    timestamp = models.DateTimeField()
+    action = models.CharField(choices=(('0', 'delete'),
+                                       ('1', 'edit'),
+                                       ('2', 'create'),
+                                       ), max_length=1)
+    timestamp = models.DateTimeField(auto_now_add=True)
     id_item = models.IntegerField()
 
     def __unicode__(self):

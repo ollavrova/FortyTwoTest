@@ -5,17 +5,13 @@ from django import forms
 from apps.hello.models import Person
 
 
-class LoginForm(forms.Form):
-    username = forms.CharField(max_length=150, label="Username")
-    password = forms.CharField(label="Password", widget=forms.PasswordInput)
-
-
 class PersonEditForm(forms.ModelForm):
     class Meta:
         model = Person
         widgets = {
             'birthday': CustomDatePicker(
-                params="dateFormat: 'yy-mm-dd', changeYear: true, defaultDate: '-37y', yearRange: 'c-15:c+15'",  # NOQA
+                params="dateFormat: 'yy-mm-dd', changeYear: true," +
+                       "defaultDate: '-37y', yearRange: 'c-15:c+15'",
                 attrs={'type': 'date'},
             )
         }

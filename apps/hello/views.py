@@ -1,5 +1,4 @@
 import datetime
-import time
 import json
 import logging
 from apps.hello.forms import PersonEditForm
@@ -25,20 +24,16 @@ def home(request):
 
 def req(request):
     if request.method == 'POST' and request.is_ajax():
-        try:
-            get_time = json.loads(request.body)['old_time']
-            start = datetime.datetime.strptime(get_time,
-                                               '%Y-%m-%d %H:%M:%S.%f')
-            delta = Requests.objects.filter(
-                timestamp__gt=start,
-                timestamp__lt=datetime.datetime.now()).exclude(
-                request_method='POST',
-                request_path='/requests/').count()
-            if delta:
-                logger.info('check requests:' + str({'new': delta}))
-        except Exception as e:
-            delta = e.message
-            logger.error(delta)
+        get_time = json.loads(request.body)['old_time']
+        start = datetime.datetime.strptime(get_time,
+                                           '%Y-%m-%d %H:%M:%S.%f')
+        delta = Requests.objects.filter(
+            timestamp__gt=start,
+            timestamp__lt=datetime.datetime.now()).exclude(
+            request_method='POST',
+            request_path='/requests/').count()
+        if delta:
+            logger.info('check requests:' + str({'new': delta}))
         timedata = DateFormat(datetime.datetime.now()).format('Y-m-d H:i:s.u')
         return HttpResponse(json.dumps({'result': delta,
                                         'old_time': timedata}),
@@ -61,12 +56,8 @@ def edit(request):
         logger.info('User %s tried to edit data.' % request.user)
         form = PersonEditForm(request.POST, request.FILES, instance=person)
         if form.is_valid():
-            try:
-                form.save()
-                logger.info('The form is saved.')
-            except Exception as e:
-                messages.add_message(request, messages.ERROR, e)
-                logger.exception(e)
+            form.save()
+            logger.info('The form is saved.')
         else:
             messages.add_message(request, messages.ERROR, form.errors)
         return render_to_response('hello/reload.html',

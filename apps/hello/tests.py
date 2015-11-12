@@ -6,6 +6,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.template import Context, Template
 from fortytwo_test_task.settings import STATICFILES_DIRS
 from apps.hello.models import Person, Requests, Journal
+import json
 from django.core.urlresolvers import reverse
 from StringIO import StringIO
 from django.test import TestCase, LiveServerTestCase
@@ -378,9 +379,11 @@ class TestCustomerRequest(LiveServerTestCase):
         first = self.browser.find_element_by_css_selector(css_selector1)
         second = self.browser.find_element_by_css_selector(css_selector2)
         self.assertTrue(first.is_displayed())
-        self.assertIn(DateFormat(self.req1.timestamp).format('H:i:s.u d-m-Y'),
+        self.assertIn(DateFormat(self.req1.timestamp).
+                      format('H:i:s.u d-m-Y'),
                       first.text)
-        self.assertIn(DateFormat(self.req2.timestamp).format('H:i:s.u d-m-Y'),
+        self.assertIn(DateFormat(self.req2.timestamp).
+                      format('H:i:s.u d-m-Y'),
                       second.text)
 
 
@@ -388,17 +391,18 @@ class TestRequestCount(TestCase):
 
     def test_post(self):
         """
-        test for post request for counting requests function
+        test for post request for counting requests function -
+        it send a time and got result number back
         """
         response = self.client.get(reverse('req'))
         self.client.get(reverse('home'))
-        data = {
-            'csrfmiddlewaretoken': response.context[0]['csrf_token'],
-            'old_time': response.context[0]['old_time']
-        }
+        data = dict()
+        data['old_time'] = response.context[0]['old_time']
+        params = json.dumps(data)
         response2 = self.client.post(
             reverse('req'),
-            data,
+            content_type='application/json',
+            data=params,
             HTTP_X_REQUESTED_WITH="XMLHttpRequest")
-        self.assertContains(response2, "result")
+        self.assertContains(response2, '"result": 1')
         self.assertContains(response2, "old_time")

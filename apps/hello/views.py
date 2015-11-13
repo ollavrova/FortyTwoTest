@@ -10,6 +10,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.response import TemplateResponse
 from django.utils.dateformat import DateFormat
+from signals import *
 
 
 logger = logging.getLogger(__name__)

@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'apps.hello',
     'south',
     'easy_thumbnails',
+    'django_remote_forms',
 )
 
 MIDDLEWARE_CLASSES = (

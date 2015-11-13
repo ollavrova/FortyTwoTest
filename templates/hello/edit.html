@@ -23,5 +23,81 @@
 <form enctype="multipart/form-data"
               id="send-form" action="{% url 'edit' %}" method="post">
             {% include 'hello/reload.html' %}
+{#        {% csrf_token %}#}
+{#        {% load thumbnail %}#}
+{##}
+{#        <div class="col-xs-9 left-side">#}
+{#            <p>{{ form.first_name.label_tag }} {{ form.first_name }}#}
+{#            {% if form.first_name.errors %}<p>{{ form.first_name.errors }} </p> {% endif %}#}
+{#            </p>#}
+{##}
+{#            <p>{{ form.last_name.label_tag }} {{ form.last_name }}#}
+{#             {% if form.last_name.errors %}<p>{{ form.last_name.errors }} </p> {% endif %}#}
+{#            </p>#}
+{##}
+{#            <p>{{ form.birthday.label_tag }} {{ form.birthday }}#}
+{#            {% if form.birthday.errors %}<p>{{ form.birthday.errors }} </p> {% endif %} </p>#}
+{##}
+{#            <p>Photo: {{ form.photo }}</p>#}
+{##}
+{#            <div class="image-edit">#}
+{#                {% if person.photo %}#}
+{#                    {% thumbnail form.instance.photo 229x314 crop upscale as thumb %}#}
+{#                                   <img class="image-edit" src="{{ thumb.url }}" id="image_edit" name="image_edit"#}
+{#                                                 width="{{ thumb.width }}"#}
+{#                                                 height="{{ thumb.height }}" />#}
+{#                {% else %}#}
+{#                    <img id="image_edit" class="image-edit" style="display: none" />#}
+{#                {% endif %}#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="col-xs-9 right-side">#}
+{#            <p>Contacts</p>#}
+{##}
+{#            <p>{{ form.email.label_tag }} {{ form.email }}#}
+{#             {% if form.email.errors %}<p>{{ form.email.errors }} </p> {% endif %}#}
+{#            </p>#}
+{##}
+{#            <p>{{ form.jabber.label_tag }}{{ form.jabber }}#}
+{#             {% if form.jabber.errors %}<p>{{ form.jabber.errors }} </p> {% endif %}#}
+{#            </p>#}
+{##}
+{#            <p>{{ form.skype.label_tag }} {{ form.skype }}#}
+{#             {% if form.skype.errors %}<p>{{ form.skype.errors }} </p> {% endif %}#}
+{#            </p>#}
+{##}
+{#            <p>{{ form.other.label_tag }}#}
+{##}
+{#            <div class="multiline">{{ form.other }}</div>#}
+{#         {% if form.other.errors %}<p>{{ form.other.errors }} </p> {% endif %}#}
+{##}
+{#            </p>#}
+{#            <p>{{ form.bio.label_tag }}#}
+{##}
+{#            <div class="multiline">{{ form.bio }}</div>#}
+{#         {% if form.bio.errors %}<p>{{ form.bio.errors }} </p> {% endif %}#}
+{#            </p>#}
+{#        </div>#}
+{##}
+{#        <div id="result">#}
+{#        </div>#}
+{#           <div id="errors" class="inner alert-error">#}
+{#        {% if form.errors %}#}
+{#            <!-- Error messaging -->#}
+{#                    <p>There were some errors in the information you entered. Please correct the following:</p>#}
+{#                    {{ form.non_field_errors }}#}
+{#                        {% for field in form %}#}
+{#                            {% if field.errors %}#}
+{#                                 <p>{{ field.label }}: {{ field.errors|striptags }}</p> {% endif %}#}
+{#                        {% endfor %}#}
+{#            <!-- /Error messaging -->#}
+{#        {% endif %}#}
+{#        </div>#}
+{#        <div class="left-side" id="sendwrapper">#}
+{#            <input id="sendbutton" class="editform save" type="submit" value="Save"/>#}
+{#        </div>#}
+{#        <div class="right-side">#}
+{#            <a href="{% url 'home' %}">Cancel</a>#}
+{#        </div>#}
 </form>
 {% endblock %}

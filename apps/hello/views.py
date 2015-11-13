@@ -11,7 +11,8 @@ from django.template import RequestContext
 from django.template.response import TemplateResponse
 from django.utils.dateformat import DateFormat
 from signals import *
-
+from django.forms.models import model_to_dict
+from django_remote_forms.forms import RemoteForm
 
 logger = logging.getLogger(__name__)
 
@@ -61,9 +62,11 @@ def edit(request):
             logger.info('The form is saved.')
         else:
             messages.add_message(request, messages.ERROR, form.errors)
-        return render_to_response('hello/reload.html',
-                                  {'form': form, 'person': person},
-                                  RequestContext(request))
+        response_data = dict()
+        response_data['form'] = RemoteForm(form).as_dict()
+        response_data['person'] = model_to_dict(person)
+        response_data['photo'] = person.photo.url if person.photo else None
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
     else:
         form = PersonEditForm(instance=person)
     return render_to_response('hello/edit.html',

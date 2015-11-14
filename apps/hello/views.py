@@ -1,6 +1,8 @@
 import datetime
 import json
 import logging
+from django.core import serializers
+import simplejson
 from apps.hello.forms import PersonEditForm
 from apps.hello.models import Person, Requests
 from django.contrib import messages
@@ -11,7 +13,6 @@ from django.template import RequestContext
 from django.template.response import TemplateResponse
 from django.utils.dateformat import DateFormat
 from signals import *
-from django.forms.models import model_to_dict
 from django_remote_forms.forms import RemoteForm
 
 logger = logging.getLogger(__name__)
@@ -57,18 +58,29 @@ def edit(request):
     if request.method == 'POST' and request.is_ajax():
         logger.info('User %s tried to edit data.' % request.user)
         form = PersonEditForm(request.POST, request.FILES, instance=person)
+        response_data = dict()
+        response_data['data'] = form.data
         if form.is_valid():
             form.save()
             logger.info('The form is saved.')
+            response_data['err'] = 'false'
         else:
+            response_data['err'] = 'true'
+            errors = {}
+            for e in form.errors.iteritems():
+                errors.update({e[0]: unicode(e[1])})
+            response_data['errors'] = errors
             messages.add_message(request, messages.ERROR, form.errors)
-        response_data = dict()
-        response_data['form'] = RemoteForm(form).as_dict()
-        response_data['person'] = model_to_dict(person)
-        response_data['photo'] = person.photo.url if person.photo else None
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        form.photo = None
+        response_data['form'] = (RemoteForm(form)).as_dict()
+        response_data['form']['fields']['photo']['initial'] = None
+        response_data['photo'] = person.photo.url if person.photo.name else None
+        logger.info('response_data =' + json.dumps(response_data))
+        print 'response_data = ', json.dumps(response_data)
+        return HttpResponse(json.dumps(response_data), mimetype='application/json')
+
     else:
         form = PersonEditForm(instance=person)
     return render_to_response('hello/edit.html',
-                              {'form': form, 'person': person},
+                              {'form': form, 'photo': person.photo},
                               RequestContext(request))

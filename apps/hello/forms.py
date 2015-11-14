@@ -23,6 +23,8 @@ class PersonEditForm(forms.ModelForm):
             if (field == 'bio') or (field == 'other'):
                 self.fields[field].widget.attrs['class'] = 'multiline'
                 self.fields[field].widget = forms.Textarea(attrs={'rows': 4})
+            elif field == 'photo':
+                self.fields[field].widget.attrs['class'] = "image-edit"
             else:
                 self.fields[field].widget.attrs['class'] = 'editform'
 

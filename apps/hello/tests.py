@@ -295,7 +295,7 @@ class TestSignalProcessor(TestCase):
         # check editing signal
         self.person.first_name = 'TestName'
         self.person.save()
-        self.assertTrue(Journal.objects.filter(id_item=1,
+        self.assertTrue(Journal.objects.filter(id_item=self.person.id,
                                                model_name=Person.__name__,
                                                action='edit'))
         # check creating signal

@@ -9,11 +9,20 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
+import errno
 import os
 import sys
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(__file__))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
+LOG_FILE = os.path.join(BASE_DIR + '/log/log.txt')
+
+# if not os.path.exists(LOG_FILE):
+#     os.makedirs(LOG_FILE)
+
+# if not os.path.exists(os.path.dirname(LOG_FILE)):
+#     os.makedirs(os.path.dirname(LOG_FILE))
 
 # App/Library Paths
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
@@ -140,6 +149,20 @@ ADMINS = (
          ('Olga', 'krocozabr@gmail.com'),
 )
 
+
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc:
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise
+
+
+# make log directory if not exist
+mkdir_p(LOG_FILE)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -171,7 +194,7 @@ LOGGING = {
         'logfile': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR + "/log/log.txt",
+            'filename': os.path.basename(LOG_FILE),
             'maxBytes': 50000,
             'formatter': 'standard',
         },

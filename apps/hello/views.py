@@ -12,6 +12,7 @@ from django.template import RequestContext
 from django.template.response import TemplateResponse
 from django.utils.dateformat import DateFormat
 from django.views.generic import UpdateView
+from django_remote_forms.forms import RemoteForm
 from signals import *
 
 
@@ -117,6 +118,8 @@ class Edit(AjaxableResponseMixin, UpdateView):
         context = super(Edit, self).ajax_valid_context_data(**kwargs)
         thumbnail = self.object.photo.get_thumbnail(self.thumbnail_options)
         context['photo'] = thumbnail.url if thumbnail else None
+        form = PersonEditForm(self.request.POST, self.request.FILES)
+        context['form'] = RemoteForm(form).as_dict()
         return context
 
 edit = login_required(Edit.as_view())

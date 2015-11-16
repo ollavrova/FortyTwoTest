@@ -32,6 +32,7 @@ function beforeRequest(formData, jqForm, options) {
 }
 
 function afterRequest(responseText, statusText, xhr, $form) {
+    console.log("success");
     $("input").attr('disabled', false);
     $("textarea").attr('disabled', false);
     $("#sendbutton").prop('disabled', false);

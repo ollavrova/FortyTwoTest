@@ -5,11 +5,13 @@ from apps.hello.forms import PersonEditForm
 from apps.hello.models import Person, Requests
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.response import TemplateResponse
 from django.utils.dateformat import DateFormat
+from django.views.generic import UpdateView
 from signals import *
 
 
@@ -50,22 +52,71 @@ def req(request):
     return response
 
 
-@login_required
-def edit(request):
-    person = Person.objects.get(pk=1)
-    if request.method == 'POST' and request.is_ajax():
-        logger.info('User %s tried to edit data.' % request.user)
-        form = PersonEditForm(request.POST, request.FILES, instance=person)
-        if form.is_valid():
-            form.save()
-            logger.info('The form is saved.')
+# @login_required
+# def edit(request):
+#     person = Person.objects.get(pk=1)
+#     if request.method == 'POST' and request.is_ajax():
+#         logger.info('User %s tried to edit data.' % request.user)
+#         form = PersonEditForm(request.POST, request.FILES, instance=person)
+#         if form.is_valid():
+#             form.save()
+#             logger.info('The form is saved.')
+#         else:
+#             messages.add_message(request, messages.ERROR, form.errors)
+#         return render_to_response('hello/reload.html',
+#                                   {'form': form, 'person': person},
+#                                   RequestContext(request))
+#     else:
+#         form = PersonEditForm(instance=person)
+#     return render_to_response('hello/edit.html',
+#                               {'form': form, 'person': person},
+#                               RequestContext(request))
+
+
+class AjaxableResponseMixin(object):
+
+    def render_to_json_response(self, context, **response_kwargs):
+        data = json.dumps(context)
+        response_kwargs['content_type'] = 'application/json'
+        return HttpResponse(data, **response_kwargs)
+
+    def form_invalid(self, form):
+        response = super(AjaxableResponseMixin, self).form_invalid(form)
+        if self.request.is_ajax():
+            context = self.ajax_invalid_context_data(**form.errors)
+            return self.render_to_json_response(context, status=400)
         else:
-            messages.add_message(request, messages.ERROR, form.errors)
-        return render_to_response('hello/reload.html',
-                                  {'form': form, 'person': person},
-                                  RequestContext(request))
-    else:
-        form = PersonEditForm(instance=person)
-    return render_to_response('hello/edit.html',
-                              {'form': form, 'person': person},
-                              RequestContext(request))
+            return response
+
+    def form_valid(self, form):
+        response = super(AjaxableResponseMixin, self).form_valid(form)
+        if self.request.is_ajax():
+            context = self.ajax_valid_context_data(pk=self.object.pk)
+            return self.render_to_json_response(context)
+        else:
+            return response
+
+    def ajax_valid_context_data(self, **kwargs):
+        return kwargs
+
+    def ajax_invalid_context_data(self, **kwargs):
+        return kwargs
+
+
+class Edit(AjaxableResponseMixin, UpdateView):
+    template_name = "hello/edit.html"
+    model = Person
+    form_class = PersonEditForm
+    success_url = reverse_lazy('edit')
+    thumbnail_options = dict(size=(300, 400), crop=True)
+
+    def get_object(self, queryset=None):
+        return Person.objects.get(pk=1)
+
+    def ajax_valid_context_data(self, **kwargs):
+        context = super(Edit, self).ajax_valid_context_data(**kwargs)
+        thumbnail = self.object.photo.get_thumbnail(self.thumbnail_options)
+        context['photo'] = thumbnail.url if thumbnail else None
+        return context
+
+edit = login_required(Edit.as_view())

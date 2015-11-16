@@ -287,26 +287,26 @@ class TestSignalProcessor(TestCase):
         """
         # check if exist create records
         self.assertTrue((Journal.objects.filter(
-            id_item=self.person.pk)[0]).action == 'create')
+            id_item=self.person.pk)[0]).action == Journal.CREATED_STATUS)
         self.assertTrue(Journal.objects.filter(id_item=self.person.pk,
                                                model_name=Person.__name__,
-                                               action='create'))
+                                               action=Journal.CREATED_STATUS))
         self.client.post(reverse('login'), self.auth)
         # check editing signal
         self.person.first_name = 'TestName'
         self.person.save()
         self.assertTrue(Journal.objects.filter(id_item=self.person.id,
                                                model_name=Person.__name__,
-                                               action='edit'))
+                                               action=Journal.EDITED_STATUS))
         # check creating signal
         response = self.client.get(reverse('req'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(Journal.objects.filter(model_name=Requests.__name__,
-                                               action='create'))
+                                               action=Journal.CREATED_STATUS))
         # check deleting signal
         self.person.delete()
         self.assertTrue(Journal.objects.filter(model_name=Person.__name__,
-                                               action='delete'))
+                                               action=Journal.DELETED_STATUS))
 
 
 class TestCustomerRequest1(TestCase):

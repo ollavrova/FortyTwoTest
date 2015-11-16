@@ -16,7 +16,7 @@
     <p>Photo: {{ form.photo }}</p>
 
     <div class="image-edit">
-        {% if photo %}
+        {% if person.photo %}
             {% thumbnail form.instance.photo 229x314 crop upscale as thumb %}
                            <img class="image-edit" src="{{ thumb.url }}" id="image_edit" name="image_edit"
                                          width="{{ thumb.width }}"

@@ -21,12 +21,13 @@
 
 {% block content %}
 <form enctype="multipart/form-data"
-              id="send-form" action="{% url 'edit' %}" method="post">
-{#            {% include 'hello/reload.html' %}#}
+              id="send-form" action="{% url 'edit' pk=1 %}" method="post">
+
+{#{% include 'hello/form.html' %}#}
         {% csrf_token %}
-        {% load thumbnail %}
 
         <div class="col-xs-9 left-side">
+
             <p>{{ form.first_name.label_tag }} {{ form.first_name }}
             {% if form.first_name.errors %}<p>{{ form.first_name.errors }} </p> {% endif %}
             </p>

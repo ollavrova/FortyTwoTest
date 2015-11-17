@@ -56,7 +56,7 @@ window.onload = function(){
             }
 
             reader.readAsDataURL(input.files[0]);
-        } else {$('#image_edit').attr('style', 'display: None'); };
+        } else { $('#image_edit').attr('style', 'display: None'); };
     }
 
     $("#id_photo").change(function(){

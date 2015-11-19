@@ -14,6 +14,7 @@ from selenium import webdriver
 
 
 class TestShowPage(TestCase):
+    fixtures = ['initial_data_.json']
 
     def setUp(self):
         self.person = Person.objects.first()
@@ -88,6 +89,8 @@ class TestShowPage(TestCase):
 
 
 class TestEmptyBase(TestCase):
+    fixtures = ['initial_data_.json']
+
     def setUp(self):
         self.person = Person.objects.first()
 
@@ -144,6 +147,8 @@ class TestMiddleware(TestCase):
 
 
 class TestEditForm(TestCase):
+    fixtures = ['initial_data_.json']
+
     def setUp(self):
         self.auth = {"username": "admin", "password": "admin"}
         self.person = Person.objects.first()
@@ -258,6 +263,7 @@ class TestTemplateTag(TestCase):
 
 
 class TestCommand(TestCase):
+    fixtures = ['initial_data_.json']
 
     def test_command(self):
         """

@@ -16,6 +16,11 @@ class PersonEditForm(forms.ModelForm):
             )
         }
 
+    class Media:
+        js = ("js/jquery.js",
+              "js/jquery.form.js",
+              "js/load.js")
+
     def __init__(self, *args, **kwargs):
         super(PersonEditForm, self).__init__(*args, **kwargs)
         self.fields['email'].widget.attrs['type'] = 'email'
@@ -23,6 +28,8 @@ class PersonEditForm(forms.ModelForm):
             if (field == 'bio') or (field == 'other'):
                 self.fields[field].widget.attrs['class'] = 'multiline'
                 self.fields[field].widget = forms.Textarea(attrs={'rows': 4})
+            elif field == 'photo':
+                self.fields[field].widget.attrs['class'] = "image-edit"
             else:
                 self.fields[field].widget.attrs['class'] = 'editform'
 

@@ -30,11 +30,19 @@ class Requests(models.Model):
 
 
 class Journal(models.Model):
+
+    CREATED_STATUS = 1
+    EDITED_STATUS = 2
+    DELETED_STATUS = 3
+    ACTION_CHOICES = (
+        (CREATED_STATUS, 'create'),
+        (EDITED_STATUS, 'edit'),
+        (DELETED_STATUS, 'delete'),
+    )
+
     model_name = models.CharField(max_length=25)
-    action = models.CharField(choices=(('0', 'delete'),
-                                       ('1', 'edit'),
-                                       ('2', 'create'),
-                                       ), max_length=1)
+    action = models.PositiveIntegerField(choices=ACTION_CHOICES,
+                                         default=CREATED_STATUS)
     timestamp = models.DateTimeField(auto_now_add=True)
     id_item = models.IntegerField()
 

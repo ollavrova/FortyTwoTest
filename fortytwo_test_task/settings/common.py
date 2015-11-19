@@ -9,11 +9,14 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
 import os
 import sys
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(__file__))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
+LOG_FILE = os.path.join(BASE_DIR + '/log/log.txt')
+
 
 # App/Library Paths
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
@@ -45,6 +48,7 @@ INSTALLED_APPS = (
     'apps.hello',
     'south',
     'easy_thumbnails',
+    'django_remote_forms',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -170,7 +174,7 @@ LOGGING = {
         'logfile': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR + "/log/log.txt",
+            'filename': os.path.basename(LOG_FILE),
             'maxBytes': 50000,
             'formatter': 'standard',
         },

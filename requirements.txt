@@ -3,3 +3,4 @@ South==1.0.2
 easy_thumbnails==2.2
 selenium==2.48.0
 flake8==2.4.1
+-e git+https://github.com/WiserTogether/django-remote-forms.git#egg=django-remote-forms

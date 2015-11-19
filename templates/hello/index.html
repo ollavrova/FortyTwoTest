@@ -11,7 +11,7 @@
             <div class="right-side">
                 <p>
                     {% if user.is_authenticated %}
-                        <a href="{% url 'edit' %}">Edit</a>
+                        <a href="{% url 'edit' person.id %}">Edit</a>
                         <a href="{% edit_link person %}">(admin)</a>
                         <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
                     {% else %}

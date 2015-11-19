@@ -1,10 +1,8 @@
 {% extends 'base.html' %}
-{% load static staticfiles %}
+{% load static staticfiles thumbnail %}
 {% block title %}Edit page{% endblock %}
 {% block extra_head %}
     {{ form.media }}
-    <script src="{% static 'js/jquery.form.js' %}"></script>
-    <script src="{% static 'js/load.js' %}"></script>
 {% endblock %}
 
 {% block title-block %}
@@ -23,7 +21,6 @@
 <form enctype="multipart/form-data"
               id="send-form" action="{% url 'edit' pk=1 %}" method="post">
 
-{#{% include 'hello/form.html' %}#}
         {% csrf_token %}
 
         <div class="col-xs-9 left-side">

@@ -155,18 +155,26 @@ class TestEditForm(TestCase):
         self.assertEqual(self.client.get(reverse('logout')).status_code, 302)
         self.assertEqual(self.client.get(reverse('home')).status_code, 200)
         self.assertEqual(self.client.get(reverse('req')).status_code, 200)
-        self.assertEqual(self.client.get(reverse('edit')).status_code, 302)
+        self.assertEqual(self.client.get(reverse('edit',
+                         kwargs={'pk': 1})).status_code,
+                         302)
         self.client.post(reverse('login'), self.auth)
-        self.assertEqual(self.client.get(reverse('edit')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('edit',
+                         kwargs={'pk': 1})).status_code,
+                         200)
         self.assertEqual(self.client.get(reverse('logout')).status_code, 302)
-        self.assertEqual(self.client.get(reverse('edit')).status_code, 302)
+        self.assertEqual(self.client.get(reverse('edit',
+                         kwargs={'pk': 1})).status_code,
+                         302)
 
     def test_editform(self):
         """
         test edit form - we change info and save it.
         """
         self.client.post(reverse('login'), self.auth)
-        self.assertEqual(self.client.get(reverse('edit')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('edit',
+                         kwargs={'pk': 1})).status_code,
+                         200)
         upload_file = open(os.path.join(STATICFILES_DIRS[0],
                                         'img', "test.jpg"), "rb")
         data = dict(
@@ -180,10 +188,11 @@ class TestEditForm(TestCase):
             other="qwerty qwerty qwerty",
             photo=SimpleUploadedFile(upload_file.name, upload_file.read())
         )
-        response = self.client.post(reverse('edit'), data=data,
+        response = self.client.post(reverse('edit', kwargs={'pk': 1}),
+                                    data=data,
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        response1 = self.client.get(reverse('edit'))
+        response1 = self.client.get(reverse('edit', kwargs={'pk': 1}))
         self.assertContains(response1, data['first_name'])
         self.assertContains(response1, data['last_name'])
         self.assertContains(response1, data['bio'])
@@ -217,7 +226,7 @@ class TestEditForm(TestCase):
     #         last_name='',
     #         skype=''
     #     )
-    #     response = self.client.post(reverse('edit'), data,
+    #     response = self.client.post(reverse('edit', kwargs={'pk': 1}), data,
     #                                 HTTP_X_REQUESTED_WITH="XMLHttpRequest")
     #     self.assertContains(response, 'There were some errors')
     #     self.assertContains(response, 'Please correct the following:')

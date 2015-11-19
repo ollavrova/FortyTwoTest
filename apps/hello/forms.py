@@ -16,6 +16,11 @@ class PersonEditForm(forms.ModelForm):
             )
         }
 
+    class Media:
+        js = ("js/jquery.js",
+              "js/jquery.form.js",
+              "js/load.js")
+
     def __init__(self, *args, **kwargs):
         super(PersonEditForm, self).__init__(*args, **kwargs)
         self.fields['email'].widget.attrs['type'] = 'email'

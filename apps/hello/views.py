@@ -55,7 +55,7 @@ def req(request):
 
 @login_required
 def edit(request, pk):
-    person = Person.objects.get(pk=pk)
+    person = Person.objects.get(id=pk)
     if request.method == 'POST' and request.is_ajax():
         logger.info('User %s tried to edit data.' % request.user)
         form = PersonEditForm(request.POST, request.FILES, instance=person)
@@ -64,21 +64,27 @@ def edit(request, pk):
         if form.is_valid():
             form.save()
             response_data['err'] = 'false'
-            logger.info('The form is saved.')
+            logger.info('The form is saved. No errors.')
         else:
             response_data['err'] = 'true'
             errors = {}
             for e in form.errors.iteritems():
                 errors.update({e[0]: unicode(e[1])})
-            response_data['errors'] = errors
+            response_data['errs'] = errors
             messages.add_message(request, messages.ERROR, form.errors)
-            form.photo = None
-            response_data['form'] = (RemoteForm(form)).as_dict()
-            response_data['form']['fields']['photo']['initial'] = None
-            response_data['photo'] = person.photo.url if person.photo.name else None
-            logger.info('response_data =' + json.dumps(response_data, indent=4))
-            return HttpResponse(json.dumps(response_data), content_type='application/javascript')
+            logger.info('Errors of form saving!' + str(errors))
+        form.photo = None
+        response_data['form'] = (RemoteForm(form)).as_dict()
+        response_data['form']['fields']['photo']['initial'] = None
+        response_data['photo'] = person.photo.url if person.photo \
+            else None
+        # logger.info('response_data =' + json.dumps(response_data['form'],
+        #                                            indent=4))
+        return HttpResponse(json.dumps(response_data),
+                            content_type='application/javascript')
     else:
         form = PersonEditForm(instance=person)
+        photo = person.photo.url if person.photo else None
     return render(request, 'hello/edit.html',
-                           {'form': form, 'person': person})
+                           {'form': form, 'person': person,
+                            'photo': photo})

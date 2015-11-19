@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'Requests.priority'
         db.add_column(u'hello_requests', 'priority',
-                      self.gf('django.db.models.fields.IntegerField')(default=0),
+                      self.gf('django.db.models.fields.IntegerField')(default=1),
                       keep_default=False)
 
 
@@ -20,6 +20,14 @@ class Migration(SchemaMigration):
 
 
     models = {
+        u'hello.journal': {
+            'Meta': {'object_name': 'Journal'},
+            'action': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'id_item': ('django.db.models.fields.IntegerField', [], {}),
+            'model_name': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
+        },
         u'hello.person': {
             'Meta': {'object_name': 'Person'},
             'bio': ('django.db.models.fields.TextField', [], {}),
@@ -36,19 +44,11 @@ class Migration(SchemaMigration):
         u'hello.requests': {
             'Meta': {'object_name': 'Requests'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'priority': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
             'request_method': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True'}),
-            'priority': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'request_path': ('django.db.models.fields.CharField', [], {'max_length': '250', 'null': 'True'}),
             'row': ('django.db.models.fields.CharField', [], {'max_length': '1000'}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
-        },
-        u'hello.journal': {
-            'Meta': {'object_name': 'Journal'},
-            'action': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'id_item': ('django.db.models.fields.IntegerField', [], {}),
-            'model_name': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
-            'timestamp': ('django.db.models.fields.DateTimeField', [], {})
         }
     }
 

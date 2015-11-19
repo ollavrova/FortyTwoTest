@@ -3,12 +3,12 @@
         "fields": {
             "first_name": "Olga",
             "last_name": "Lavrova",
-            "bio": "born in 1978, study: school 1985-1995 years, university 1995-2000, working way from 2000",
+            "bio": "born in 1978, study: \n school 1985-1995 years, \n university 1995-2000, \n working way from 2000",
             "birthday": "1978-05-22",
             "email": "krocozabr@gmail.com",
             "jabber": "ollavr@jabber.ru",
             "skype": "ollavrova",
-            "other": "nothing"
+            "other": "nothing special"
         },
         "model": "hello.person",
         "pk": 1

@@ -44,9 +44,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'apps.hello',
     'south',
+    'apps.hello',
     'easy_thumbnails',
     'django_remote_forms',
 )
@@ -72,7 +71,7 @@ WSGI_APPLICATION = 'fortytwo_test_task.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db_new.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db_new_app.sqlite3'),
     }
 }
 

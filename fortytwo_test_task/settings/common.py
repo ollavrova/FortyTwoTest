@@ -221,11 +221,11 @@ def patch_broken_pipe_error():
         type, err, tb = sys.exc_info()
         return repr(err) == "error(32, 'Broken pipe')"
 
-    def my_handle_error(self, request, client_address):
+    def my_handle_error(self, request, client_address):   # noqa
         if not is_broken_pipe_error():
             handle_error(self, request, client_address)
 
-    def my_log_exception(self, exc_info):
+    def my_log_exception(self, exc_info):   # noqa
         if not is_broken_pipe_error():
             log_exception(self, exc_info)
 

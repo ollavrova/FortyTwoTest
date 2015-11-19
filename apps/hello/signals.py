@@ -5,7 +5,7 @@ from apps.hello.models import Journal
 models_list = ['Journal', 'Session']
 
 
-@receiver(post_save)
+@receiver(post_save)   # noqa
 def callback_save(sender, instance=None, created=False, **kwargs):
     if sender.__name__ not in models_list:
         action = Journal.CREATED_STATUS if created else Journal.EDITED_STATUS
@@ -14,7 +14,7 @@ def callback_save(sender, instance=None, created=False, **kwargs):
                 id_item=instance.id).save()
 
 
-@receiver(post_delete)
+@receiver(post_delete)   # noqa
 def callback_delete(sender, instance, signal, *args, **kwargs):
     if sender.__name__ not in models_list:
         Journal(model_name=sender.__name__,

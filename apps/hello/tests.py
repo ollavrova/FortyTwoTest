@@ -216,23 +216,17 @@ class TestEditForm(TestCase):
         self.assertEqual(person.skype, data['skype'])
         self.assertEqual(person.other, data['other'])
 
-    # def test_show_errors(self):
-    #     """
-    #     test for checking show errors if was input a wrong data
-    #     """
-    #     self.client.post(reverse('login'), self.auth)
-    #     data = dict(
-    #         first_name='',
-    #         last_name='',
-    #         skype=''
-    #     )
-    #     response = self.client.post(reverse('edit', kwargs={'pk': 1}), data,
-    #                                 HTTP_X_REQUESTED_WITH="XMLHttpRequest")
-    #     self.assertContains(response, 'There were some errors')
-    #     self.assertContains(response, 'Please correct the following:')
-    #     self.assertContains(response, 'First Name: This field is required.')
-    #     self.assertContains(response, 'Last Name: This field is required.')
-    #     self.assertContains(response, 'Skype: This field is required.')
+    def test_show_errors(self):
+        """
+        test for checking show errors if was input a wrong data
+        """
+        self.client.post(reverse('login'), self.auth)
+        data = dict(
+            first_name='',
+        )
+        response = self.client.post(reverse('edit', kwargs={'pk': 1}), data,
+                                    HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        self.assertContains(response, '<li>This field is required.</li>')
 
 
 class TestTemplateTag(TestCase):
@@ -318,7 +312,7 @@ class TestSignalProcessor(TestCase):
                                                action=Journal.DELETED_STATUS))
 
 
-class TestCustomerRequest1(TestCase):
+class TestCustomerRequestWithSelenim(TestCase):
 
     def setUp(self):
         self.browser = webdriver.PhantomJS()

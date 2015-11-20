@@ -3,7 +3,6 @@ import json
 import logging
 from apps.hello.forms import PersonEditForm
 from apps.hello.models import Person, Requests
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, render

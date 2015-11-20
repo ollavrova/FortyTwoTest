@@ -5,13 +5,12 @@ $(document).ready(function (e) {
         datatype: 'json',
         target: $("#send-form"),   // target element(s) to be updated with server response
         beforeSubmit: beforeRequest,  // pre-submit callback
-        success: afterRequest,  // post-submit callback
         error: function processFormError(data) { console.log('process error!');
                      if (data.responseText) {
                          $('.errors').remove();
                          $("#result").html('');
                          resp = $.parseJSON(data.responseText);
-                         if (eval(resp.err)) {  console.log('process resp.err!');
+                         if (resp.errs) {  console.log('process resp.err!');
                              errors = eval(resp.errs);
                              $.each(errors, function(fieldname, errmsg)
                              {   id = "#id_" + fieldname;
@@ -38,23 +37,11 @@ $(document).ready(function (e) {
 });
 
 function beforeRequest(formData, jqForm, options) {
-    var queryString = $.param(formData);
-    var file = $('#id_photo').get(0).files[0];
     $("#result").html('');
     $("#send-form input textarea #sendbutton").attr('disabled', true);
     $("#result").prepend('<span>Saving, please wait... </span>');
     return true;
 }
-
-function afterRequest(responseText, statusText, xhr, $form) {
-    console.log('1');
-         $('.errors').remove();
-    $("#send-form input textarea #sendbutton").prop('disabled', false);
-    $("#result").html('');
-    resp = $.parseJSON(responseText);
-    console.log(' eval err: )' + (eval(resp.err)));
-    $("#result").prepend('<span>Changes have been saved.</span>');
-};
 
 // preview of photo
 window.onload = function(){

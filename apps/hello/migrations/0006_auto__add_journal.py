@@ -8,13 +8,12 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-
         # Adding model 'Journal'
         db.create_table(u'hello_journal', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('model_name', self.gf('django.db.models.fields.CharField')(max_length=25)),
-            ('action', self.gf('django.db.models.fields.CharField')(max_length=1)),
-            ('timestamp', self.gf('django.db.models.fields.DateTimeField')()),
+            ('action', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
+            ('timestamp', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('id_item', self.gf('django.db.models.fields.IntegerField')()),
         ))
         db.send_create_signal(u'hello', ['Journal'])
@@ -28,11 +27,11 @@ class Migration(SchemaMigration):
     models = {
         u'hello.journal': {
             'Meta': {'object_name': 'Journal'},
-            'action': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
+            'action': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'id_item': ('django.db.models.fields.IntegerField', [], {}),
             'model_name': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
-            'timestamp': ('django.db.models.fields.DateTimeField', [], {})
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         u'hello.person': {
             'Meta': {'object_name': 'Person'},

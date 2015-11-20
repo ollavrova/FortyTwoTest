@@ -3,17 +3,14 @@ import json
 import logging
 from apps.hello.forms import PersonEditForm
 from apps.hello.models import Person, Requests
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.template.response import TemplateResponse
 from django.utils.dateformat import DateFormat
-from django.views.generic import UpdateView
 from django_remote_forms.forms import RemoteForm
-from signals import *
+from signals import *  # noqa
 
 
 logger = logging.getLogger(__name__)
@@ -56,35 +53,29 @@ def req(request):
 @login_required
 def edit(request, pk):
     person = Person.objects.get(id=pk)
+    form = PersonEditForm(instance=person)
+    photo = person.photo.url if person.photo else None
     if request.method == 'POST' and request.is_ajax():
-        logger.info('User %s tried to edit data.' % request.user)
         form = PersonEditForm(request.POST, request.FILES, instance=person)
         response_data = dict()
-        response_data['data'] = form.data
         if form.is_valid():
             form.save()
-            response_data['err'] = 'false'
-            logger.info('The form is saved. No errors.')
         else:
-            response_data['err'] = 'true'
-            errors = {}
-            for e in form.errors.iteritems():
-                errors.update({e[0]: unicode(e[1])})
-            response_data['errs'] = errors
-            messages.add_message(request, messages.ERROR, form.errors)
-            logger.info('Errors of form saving!' + str(errors))
-        form.photo = None
+            response_data['errs'] = process_form_err(form)
+            logger.info('Errors of form saving!' + str(response_data['errs']))
+        form.photo = person.photo.url if person.photo else None
         response_data['form'] = (RemoteForm(form)).as_dict()
         response_data['form']['fields']['photo']['initial'] = None
-        response_data['photo'] = person.photo.url if person.photo \
-            else None
-        # logger.info('response_data =' + json.dumps(response_data['form'],
-        #                                            indent=4))
+        response_data['photo'] = photo
         return HttpResponse(json.dumps(response_data),
                             content_type='application/javascript')
-    else:
-        form = PersonEditForm(instance=person)
-        photo = person.photo.url if person.photo else None
     return render(request, 'hello/edit.html',
                            {'form': form, 'person': person,
                             'photo': photo})
+
+
+def process_form_err(form):
+    errors = dict()
+    for e in form.errors.iteritems():
+        errors.update({e[0]: unicode(e[1])})
+    return errors

@@ -44,9 +44,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'apps.hello',
     'south',
+    'apps.hello',
     'easy_thumbnails',
     'django_remote_forms',
 )
@@ -72,7 +71,7 @@ WSGI_APPLICATION = 'fortytwo_test_task.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db_new.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db_new_app.sqlite3'),
     }
 }
 
@@ -221,11 +220,11 @@ def patch_broken_pipe_error():
         type, err, tb = sys.exc_info()
         return repr(err) == "error(32, 'Broken pipe')"
 
-    def my_handle_error(self, request, client_address):
+    def my_handle_error(self, request, client_address):   # noqa
         if not is_broken_pipe_error():
             handle_error(self, request, client_address)
 
-    def my_log_exception(self, exc_info):
+    def my_log_exception(self, exc_info):   # noqa
         if not is_broken_pipe_error():
             log_exception(self, exc_info)
 

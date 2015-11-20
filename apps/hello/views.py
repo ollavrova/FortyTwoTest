@@ -63,10 +63,9 @@ def edit(request, pk):
         else:
             response_data['errs'] = process_form_err(form)
             logger.info('Errors of form saving!' + str(response_data['errs']))
-        form.photo = person.photo.url if person.photo else None
+        form.photo = response_data['photo'] = photo
         response_data['form'] = (RemoteForm(form)).as_dict()
         response_data['form']['fields']['photo']['initial'] = None
-        response_data['photo'] = photo
         return HttpResponse(json.dumps(response_data),
                             content_type='application/javascript')
     return render(request, 'hello/edit.html',

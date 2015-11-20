@@ -54,33 +54,29 @@ def req(request):
 @login_required
 def edit(request, pk):
     person = Person.objects.get(id=pk)
+    form = PersonEditForm(instance=person)
+    photo = person.photo.url if person.photo else None
     if request.method == 'POST' and request.is_ajax():
-        logger.info('User %s tried to edit data.' % request.user)
         form = PersonEditForm(request.POST, request.FILES, instance=person)
         response_data = dict()
-        response_data['data'] = form.data
         if form.is_valid():
             form.save()
-            response_data['err'] = 'false'
-            logger.info('The form is saved. No errors.')
         else:
-            response_data['err'] = 'true'
-            errors = {}
-            for e in form.errors.iteritems():
-                errors.update({e[0]: unicode(e[1])})
-            response_data['errs'] = errors
-            messages.add_message(request, messages.ERROR, form.errors)
-            logger.info('Errors of form saving!' + str(errors))
-        form.photo = None
+            response_data['errs'] = process_form_err(form)
+            logger.info('Errors of form saving!' + str(response_data['errs']))
+        form.photo = person.photo.url if person.photo else None
         response_data['form'] = (RemoteForm(form)).as_dict()
         response_data['form']['fields']['photo']['initial'] = None
-        response_data['photo'] = person.photo.url if person.photo \
-            else None
+        response_data['photo'] = photo
         return HttpResponse(json.dumps(response_data),
                             content_type='application/javascript')
-    else:
-        form = PersonEditForm(instance=person)
-        photo = person.photo.url if person.photo else None
     return render(request, 'hello/edit.html',
                            {'form': form, 'person': person,
                             'photo': photo})
+
+
+def process_form_err(form):
+    errors = dict()
+    for e in form.errors.iteritems():
+        errors.update({e[0]: unicode(e[1])})
+    return errors
